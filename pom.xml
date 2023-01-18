@@ -26,7 +26,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.4</version>
                 <configuration>
-                    <mainClass>com.mycompany.mavenproject1.App</mainClass>
+                    <mainClass>ass_package.App</mainClass>
                 </configuration>
                 <executions>
                     <execution>

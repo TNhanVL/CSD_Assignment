@@ -1,4 +1,4 @@
-package com.mycompany.mavenproject1;
+package ass_package;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
