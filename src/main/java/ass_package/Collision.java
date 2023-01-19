@@ -22,7 +22,7 @@ public class Collision implements Comparable {
 
     @Override
     public int compareTo(Object o) {
-        double tmp = ((Collision) o).t - t;
+        double tmp = t - ((Collision) o).t;
         return tmp < 0 ? -1 : ((tmp == 0) ? 0 : 1);
     }
 

@@ -6,6 +6,7 @@ package ass_package;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.PriorityQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.animation.AnimationTimer;
@@ -60,6 +61,11 @@ public class GameManagement extends Application {
         return t >= 0 && (t < (now - ball.pret) / 1e9);
     }
 
+    //check from previous time to now if ball will intersect with line
+    boolean checkIntersect(Ball ballA, Ball ballB, long now) {
+        return true;
+    }
+
     void reflectBall(Ball ball, Line line) {
         long t = (long) (timeToIntersect(ball, line) * 1e9);
         ball.move(ball.pret + t);
@@ -91,15 +97,26 @@ public class GameManagement extends Application {
         }
 
         AnimationTimer t = new AnimationTimer() {
+            PriorityQueue<Collision> queue = new PriorityQueue<>();
+
             @Override
             public void handle(long now) {
-                
+
                 //check collision with line
                 for (Line line : lines) {
                     if (checkIntersect(ballA, line, now)) {
-                        reflectBall(ballA, line);
+                        queue.add(new Collision(timeToIntersect(ballA, line), ballA, line));
                     }
                 }
+
+                while (!queue.isEmpty()) {
+                    Collision cl = queue.poll();
+                    if (!checkIntersect(cl.a, (Line) cl.b, now)) {
+                        continue;
+                    }
+                    reflectBall(cl.a, (Line) cl.b);
+                }
+
                 IO.out(ballA.v);
                 ballA.move(now);
                 if (ballA.stand()) {
