@@ -39,13 +39,25 @@ public class Point {
     public void setY(double y) {
         this.y = y;
     }
-    
-    public void addX(double x){
+
+    public void addX(double x) {
         this.x += x;
     }
-    
-    public void addY(double y){
+
+    public void addY(double y) {
         this.y += y;
+    }
+
+    public Point unit() {
+        double l = distance(new Point());
+        if (l <= 0) {
+            return new Point(1, 1);
+        }
+        return new Point(x / l, y / l);
+    }
+
+    public Point mul(double m) {
+        return new Point(this.x * m, this.y * m);
     }
 
     public double cross(Point p1, Point p2) {
@@ -63,8 +75,8 @@ public class Point {
     public Point sub(Point p) {
         return new Point(x - p.getX(), y - p.getY());
     }
-    
-    public double distance(Point p){
+
+    public double distance(Point p) {
         Point p1 = this.sub(p);
         return Math.sqrt(p1.dot(p1));
     }
