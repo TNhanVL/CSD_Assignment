@@ -5,6 +5,9 @@
 package ass_package;
 
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Cursor;
@@ -27,65 +30,85 @@ public class GameManagement extends Application {
     double orgSceneX, orgSceneY;
     static double friction = -100;
 
-    class Ball extends Circle {
+    public double distance(Point p, Line l) {
+        Point vector = new Point(l.getStartX() - l.getEndX(), l.getStartY() - l.getEndY());
+        double a = vector.getY();
+        double b = -vector.getX();
+        double c = -(a * l.getStartX() + b * l.getStartY());
+        return Math.abs(a * p.getX() + b * p.getY() + c) / Math.sqrt(a * a + b * b);
+    }
 
-        Point v = new Point();
-        double pret = -1;
+    //calculate time until ball and line intersect
+    double timeToIntersect(Ball ball, Line line) {
+        Point vector = new Point(line.getStartX() - line.getEndX(), line.getStartY() - line.getEndY());
+        //line: ax + by + c = 0
+        double a = vector.getY();
+        double b = -vector.getX();
+        double c = -(a * line.getStartX() + b * line.getStartY());
 
-        public Ball(double d, double d1, double d2, Paint paint) {
-            super(d, d1, d2, paint);
-        }
+        //calculate when distance from ball to line exact to ball.radius
+        //r = (ax + by + c) / sqrt(a^2 + b^2) => calculate t1
+        double t1 = (ball.getRadius() * Math.sqrt(a * a + b * b) - c - a * ball.getCenterX() - b * ball.getCenterY()) / (a * ball.v.getX() + b * ball.v.getY());
+        //r = -(ax + by + c) / sqrt(a^2 + b^2) => calculate t2
+        double t2 = (-ball.getRadius() * Math.sqrt(a * a + b * b) - c - a * ball.getCenterX() - b * ball.getCenterY()) / (a * ball.v.getX() + b * ball.v.getY());
+        return Math.min(t1, t2);
+    }
 
-        //check it not move
-        public boolean stand() {
-            return v.distance(new Point()) <= 0.1;
-        }
+    //check from previous time to now if ball will intersect with line
+    boolean checkIntersect(Ball ball, Line line, long now) {
+        double t = timeToIntersect(ball, line);
+        return t >= 0 && (t < (now - ball.pret) / 1e9);
+    }
 
-        public void move(long now) {
-            if (pret < 0) {
-                pret = now;
-                return;
-            }
-            if (stand()) {
-                return;
-            }
-            double t = (now - pret) / 1e9;
-            pret = now;
-
-            Point a = v.unit().mul(GameManagement.friction);
-
-            double sx = 0.5 * a.getX() * t * t + t * v.getX();
-            double sy = 0.5 * a.getY() * t * t + t * v.getY();
-            v.setX(v.getX() + a.getX() * t);
-            v.setY(v.getY() + a.getY() * t);
-
-            this.setCenterX(this.getCenterX() + sx);
-            this.setCenterY(this.getCenterY() + sy);
-        }
+    void reflectBall(Ball ball, Line line) {
+        long t = (long) (timeToIntersect(ball, line) * 1e9);
+        ball.move(ball.pret + t);
+        double l = distance(ball.toPoint(), line);
+        Point n = new Point(line.getStartX() - line.getEndX(), line.getStartY() - line.getEndY()).rotate().unit();
+        ball.v = ball.v.sub(n.mul(n.dot(ball.v)).mul(2));
     }
 
     @Override
     public void start(Stage primaryStage) {
         Group root = new Group();
         Scene scene = new Scene(root, 1600, 900);
+        primaryStage.setScene(scene);
+        primaryStage.show();
 
-        Ball ballA = new Ball(30, 120, 30, Color.BLACK);
-        ballA.v = new Point(500, 300);
-        Ball ballB = new Ball(1000, 700, 30, Color.BLACK);
-        Line lineA = new Line(0, 700, 900, 0);
+        Ball ballA = new Ball(30, 120, 30, Color.BLACK, System.nanoTime());
+        ballA.v = new Point(1000, 700);
+        Ball ballB = new Ball(1000, 700, 30, Color.BLACK, System.nanoTime());
         root.getChildren().add(ballA);
         root.getChildren().add(ballB);
-        root.getChildren().add(lineA);
+
+        ArrayList<Line> lines = new ArrayList<>();
+        lines.add(new Line(10, 10, scene.getWidth() - 10, 10));
+        lines.add(new Line(10, 10, 10, scene.getHeight() - 10));
+        lines.add(new Line(scene.getWidth() - 10, 10, scene.getWidth() - 10, scene.getHeight() - 10));
+        lines.add(new Line(10, scene.getHeight() - 10, scene.getWidth() - 10, scene.getHeight() - 10));
+        for (Line line : lines) {
+            root.getChildren().add(line);
+        }
 
         AnimationTimer t = new AnimationTimer() {
             @Override
             public void handle(long now) {
+                
+                //check collision with line
+                for (Line line : lines) {
+                    if (checkIntersect(ballA, line, now)) {
+                        reflectBall(ballA, line);
+                    }
+                }
+                IO.out(ballA.v);
                 ballA.move(now);
+                if (ballA.stand()) {
+                    this.stop();
+                }
             }
         };
         t.start();
-        primaryStage.setScene(scene);
-        primaryStage.show();
+
     }
 
     public static void main(String[] args) {
