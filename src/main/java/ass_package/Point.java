@@ -56,6 +56,10 @@ public class Point {
         return new Point(x / l, y / l);
     }
 
+    public Point rotate() {
+        return new Point(y, -x);
+    }
+
     public Point mul(double m) {
         return new Point(this.x * m, this.y * m);
     }
