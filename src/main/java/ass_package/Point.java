@@ -75,6 +75,10 @@ public class Point {
     public double dot(Point p) {
         return x * p.getX() + y * p.getY();
     }
+    
+    public Point add(Point p){
+        return new Point(x + p.getX(), y + p.getY()); 
+    }
 
     public Point sub(Point p) {
         return new Point(x - p.getX(), y - p.getY());

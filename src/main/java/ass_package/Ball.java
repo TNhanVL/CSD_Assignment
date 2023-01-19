@@ -11,7 +11,7 @@ import javafx.scene.shape.Circle;
  *
  * @author TTNhan
  */
-public class Ball extends Circle {
+public class Ball extends Circle implements Cloneable {
 
     Point v = new Point();
     long pret = -1;
@@ -25,17 +25,24 @@ public class Ball extends Circle {
         return new Point(this.getCenterX(), this.getCenterY());
     }
 
+    public void setCenter(Point p) {
+        this.setCenterX(p.getX());
+        this.setCenterY(p.getY());
+    }
+
     //check it not move
     public boolean stand() {
         return v.distance(new Point()) <= 0.1;
     }
 
+    /**
+     * move Ball to current position and update velocity too
+     *
+     * @param now
+     */
     public void move(long now) {
-        if (pret < 0) {
+        if (pret < 0 || stand()) {
             pret = now;
-            return;
-        }
-        if (stand()) {
             return;
         }
         double t = (now - pret) / 1e9;
@@ -50,5 +57,10 @@ public class Ball extends Circle {
 
         this.setCenterX(this.getCenterX() + sx);
         this.setCenterY(this.getCenterY() + sy);
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }
