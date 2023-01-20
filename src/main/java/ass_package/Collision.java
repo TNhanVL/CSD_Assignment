@@ -10,6 +10,7 @@ package ass_package;
  */
 public class Collision implements Comparable {
 
+    // time from collision to current
     double t;
     Ball a;
     Object b;
@@ -17,7 +18,7 @@ public class Collision implements Comparable {
     public Collision(double t) {
         this.t = t;
     }
-    
+
     public Collision(double t, Ball a, Object b) {
         this.t = t;
         this.a = a;

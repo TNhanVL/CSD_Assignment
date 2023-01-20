@@ -15,6 +15,7 @@ import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
@@ -29,7 +30,8 @@ import javafx.stage.Stage;
 public class GameManagement extends Application {
 
     double orgSceneX, orgSceneY;
-    static double friction = 000;
+    static double friction = -200;
+    static double ballRadius = 30;
 
     public double distance(Point p, Line l) {
         Point vector = new Point(l.getStartX() - l.getEndX(), l.getStartY() - l.getEndY());
@@ -139,13 +141,13 @@ public class GameManagement extends Application {
         primaryStage.show();
 
         ArrayList<Ball> balls = new ArrayList<>();
-        balls.add(new Ball(41, 120, 30, Color.BLACK, System.nanoTime()));
+        balls.add(new Ball(41, 120, ballRadius, Color.BLACK, System.nanoTime()));
         balls.get(0).v = new Point(1000, 700);
         balls.add(new Ball(41.12208847936531, 41.241717365108215, 30, Color.RED, System.nanoTime()));
         balls.get(1).v = new Point(-1592.0843773097174, -581.1456462022795);
         for (int i = 1; i <= 10; i++) {
-            Ball a = new Ball(41 + i * 31, 550 - i * 31, 30, Color.RED, System.nanoTime());
-            a.v = new Point(i * 400, i * 400);
+            Ball a = new Ball(41 + i * 31, 550 - i * 31, ballRadius, Color.RED, System.nanoTime());
+            a.v = new Point(i * 200, i * 200);
             balls.add(a);
         }
 //        balls.get(1).pret = 1508444823700L;
@@ -163,6 +165,13 @@ public class GameManagement extends Application {
         for (Line line : lines) {
             root.getChildren().add(line);
         }
+
+        scene.setOnMouseClicked((MouseEvent e) -> {
+            Point p = new Point(e.getX(), e.getY());
+            p = p.sub(balls.get(0).toPoint()).unit().mul(700);
+            balls.get(0).v = p;
+            
+        });
 
         AnimationTimer t = new AnimationTimer() {
             PriorityQueue<Collision> queue = new PriorityQueue<>();
