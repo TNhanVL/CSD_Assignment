@@ -38,6 +38,7 @@
                               <Button layoutX="125.0" layoutY="89.0" mnemonicParsing="false" onAction="#resetScreen" prefHeight="25.0" prefWidth="97.0" text="Fit Screen" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="89.0" />
                            </children>
                         </AnchorPane>
+                        <Button layoutX="1214.0" layoutY="14.0" mnemonicParsing="false" onAction="#magicButton" text="Magic" />
                      </children>
                   </AnchorPane>
             </content>

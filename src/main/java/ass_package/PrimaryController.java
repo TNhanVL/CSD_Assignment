@@ -154,28 +154,6 @@ public class PrimaryController {
         slider.setMax(1000);
         slider.setValue(GraphManagement.NumberOfRandomVertex);
         textFieldNNumberOfVertex.setText(String.valueOf(GraphManagement.NumberOfRandomVertex));
-
-//        AnimationTimer at = new AnimationTimer() {
-//            int cnt = 0;
-//            LinkedList<Long> ll = new LinkedList<>();
-//
-//            @Override
-//            public void handle(long now) {
-//                canvas1.draw();
-//
-//                ll.addLast(now);
-//                cnt++;
-//                if (ll.size() > 60) {
-//                    ll.removeFirst();
-//                    double d = ll.getLast() - ll.getFirst();
-//                    d /= 60.0;
-//                    if (cnt % 60 == 0) {
-//                        System.out.println(1e9 / d + " FPS");
-//                    }
-//                }
-//            }
-//        };
-//        at.start();
     }
 
     @FXML
@@ -237,6 +215,14 @@ public class PrimaryController {
     @FXML
     private void resetScreen(ActionEvent event) {
         canvas1.resetScreen();
+    }
+
+    @FXML
+    private void magicButton(ActionEvent event) {
+        GameManagement game = new GameManagement(App.graphStage);
+        Stage stage = new Stage();
+        App.graphStage.hide();
+        game.start(stage);
     }
 
 }

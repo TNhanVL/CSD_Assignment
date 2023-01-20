@@ -30,8 +30,16 @@ import javafx.stage.Stage;
 public class GameManagement extends Application {
 
     double orgSceneX, orgSceneY;
-    static double friction = -200;
+    static double friction = -400;
     static double ballRadius = 30;
+    Stage graphStage;
+
+    public GameManagement() {
+    }
+
+    public GameManagement(Stage graphStage) {
+        this.graphStage = graphStage;
+    }
 
     public double distance(Point p, Line l) {
         Point vector = new Point(l.getStartX() - l.getEndX(), l.getStartY() - l.getEndY());
@@ -138,13 +146,16 @@ public class GameManagement extends Application {
         Group root = new Group();
         Scene scene = new Scene(root, 600, 600);
         primaryStage.setScene(scene);
+        primaryStage.setTitle("Magic");
         primaryStage.show();
+
+        primaryStage.setOnCloseRequest(e -> {
+            graphStage.show();
+        });
 
         ArrayList<Ball> balls = new ArrayList<>();
         balls.add(new Ball(41, 120, ballRadius, Color.BLACK, System.nanoTime()));
         balls.get(0).v = new Point(1000, 700);
-        balls.add(new Ball(41.12208847936531, 41.241717365108215, 30, Color.RED, System.nanoTime()));
-        balls.get(1).v = new Point(-1592.0843773097174, -581.1456462022795);
         for (int i = 1; i <= 10; i++) {
             Ball a = new Ball(41 + i * 31, 550 - i * 31, ballRadius, Color.RED, System.nanoTime());
             a.v = new Point(i * 200, i * 200);
@@ -168,9 +179,9 @@ public class GameManagement extends Application {
 
         scene.setOnMouseClicked((MouseEvent e) -> {
             Point p = new Point(e.getX(), e.getY());
-            p = p.sub(balls.get(0).toPoint()).unit().mul(700);
+            p = p.sub(balls.get(0).toPoint()).unit().mul(1000);
             balls.get(0).v = p;
-            
+
         });
 
         AnimationTimer t = new AnimationTimer() {

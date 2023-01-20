@@ -51,6 +51,7 @@ public class Ball extends Circle {
         pret = now;
 
         Point a = v.unit().mul(GameManagement.friction);
+//        a = a.add(new Point(0, 1000));
 
         double sx = 0.5 * a.getX() * t * t + t * v.getX();
         double sy = 0.5 * a.getY() * t * t + t * v.getY();

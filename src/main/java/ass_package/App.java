@@ -14,6 +14,7 @@ import java.io.IOException;
 public class App extends Application {
 
     static Scene scene;
+    static Stage graphStage;
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -23,6 +24,7 @@ public class App extends Application {
         stage.setMinWidth(600);
         stage.setMinHeight(500);
         stage.show();
+        graphStage = stage;
     }
 
     static void setRoot(String fxml) throws IOException {
