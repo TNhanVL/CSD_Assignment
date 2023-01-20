@@ -11,25 +11,33 @@ import javafx.scene.shape.Circle;
  *
  * @author TTNhan
  */
-public class Ball extends Circle implements Cloneable {
+public class Ball extends Circle {
 
     Point v = new Point();
     long pret = -1;
 
-    public Ball(double d, double d1, double d2, Paint paint, long now) {
+    Point prev = new Point();
+
+    public Ball(double d, double d1, double d2, Paint paint, long pret) {
         super(d, d1, d2, paint);
-        pret = now;
+        this.pret = pret;
+
+    }
+
+    public Ball(Ball ball) {
+        super(ball.getCenterX(), ball.getCenterY(), ball.getRadius(), ball.getFill());
+        this.pret = ball.pret;
+        this.v = ball.v.clone();
     }
 
     public Point toPoint() {
         return new Point(this.getCenterX(), this.getCenterY());
     }
 
-    public void setCenter(Point p) {
-        this.setCenterX(p.getX());
-        this.setCenterY(p.getY());
-    }
-
+//    public void setCenter(Point p) {
+//        this.setCenterX(p.getX());
+//        this.setCenterY(p.getY());
+//    }
     //check it not move
     public boolean stand() {
         return v.distance(new Point()) <= 0.1;
@@ -41,6 +49,7 @@ public class Ball extends Circle implements Cloneable {
      * @param now
      */
     public void move(long now) {
+        prev = toPoint();
         if (pret < 0 || stand()) {
             pret = now;
             return;
@@ -57,10 +66,15 @@ public class Ball extends Circle implements Cloneable {
 
         this.setCenterX(this.getCenterX() + sx);
         this.setCenterY(this.getCenterY() + sy);
-    }
 
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
+        if ((this.getCenterX() >= 0 && this.getCenterX() < 50) || (this.getCenterY() >= 0 && this.getCenterY() < 50)) {
+            IO.out("\nIn ball");
+            IO.out("pre p:" + prev);
+            IO.out("posision: " + toPoint());
+            IO.out("time: " + Math.round(t * 1e9) + " " + now);
+            IO.out(sx + " " + sy);
+            IO.out(v);
+            IO.out("Out ball\n");
+        }
     }
 }

@@ -14,6 +14,10 @@ public class Collision implements Comparable {
     Ball a;
     Object b;
 
+    public Collision(double t) {
+        this.t = t;
+    }
+    
     public Collision(double t, Ball a, Object b) {
         this.t = t;
         this.a = a;

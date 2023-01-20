@@ -75,9 +75,9 @@ public class Point {
     public double dot(Point p) {
         return x * p.getX() + y * p.getY();
     }
-    
-    public Point add(Point p){
-        return new Point(x + p.getX(), y + p.getY()); 
+
+    public Point add(Point p) {
+        return new Point(x + p.getX(), y + p.getY());
     }
 
     public Point sub(Point p) {
@@ -87,6 +87,11 @@ public class Point {
     public double distance(Point p) {
         Point p1 = this.sub(p);
         return Math.sqrt(p1.dot(p1));
+    }
+
+    @Override
+    public Point clone() {
+        return new Point(x, y);
     }
 
     @Override
