@@ -47,14 +47,12 @@ public class GameManagement extends Application {
         double b = -vector.getX();
         double c = -(a * line.getStartX() + b * line.getStartY());
 
-//        IO.out(a + " " + b + " " + c);
         //calculate when distance from ballA to line exact to ballA.radius
         //r = (ax + by + c) / sqrt(a^2 + b^2) => calculate t1
         double t1 = (ball.getRadius() * Math.sqrt(a * a + b * b) - c - a * ball.getCenterX() - b * ball.getCenterY()) / (a * ball.v.getX() + b * ball.v.getY());
         //r = -(ax + by + c) / sqrt(a^2 + b^2) => calculate t2
         double t2 = (-ball.getRadius() * Math.sqrt(a * a + b * b) - c - a * ball.getCenterX() - b * ball.getCenterY()) / (a * ball.v.getX() + b * ball.v.getY());
 
-//        IO.out(t1 * 1e9 + " " + t2 * 1e9);
         return Math.min(t1, t2);
     }
 
@@ -63,14 +61,10 @@ public class GameManagement extends Application {
         long pret = Math.max(ballA.pret, ballB.pret);
         Ball A = new Ball(ballA);
         Ball B = new Ball(ballB);
+
         //move two ballA for same time
-
-        IO.out("\ncheck ball ball");
-
         A.move(pret);
         B.move(pret);
-
-        IO.out("check ball ball complete\n");
 
         //Exemple 6: https://www3.ntu.edu.sg/home/ehchua/programming/java/J8a_GameIntro-BouncingBalls.html
         double cx = B.getCenterX() - A.getCenterX();
@@ -90,7 +84,6 @@ public class GameManagement extends Application {
     //check from previous time to now if ballA will intersect with line
     double checkIntersect(Ball ball, Line line, long now) {
         double t = timeToIntersect(ball, line);
-//        IO.out(t * 1e9 + " " + (now - ballA.pret));
         if (t >= 0 && (t * 1e9 <= (now - ball.pret))) {
             return t;
         }
@@ -108,9 +101,7 @@ public class GameManagement extends Application {
 
     //reflect ballA when collision a line
     void reflectBall(Ball ball, Line line, double t) {
-        IO.out("\nreflect ball line");
         ball.move((long) t);
-        IO.out("reflect ball line complete");
         Point n = new Point(line.getStartX() - line.getEndX(), line.getStartY() - line.getEndY()).rotate().unit();
         ball.v = ball.v.sub(n.mul(n.dot(ball.v)).mul(2));
     }
@@ -118,10 +109,8 @@ public class GameManagement extends Application {
     //reflect ballA when collision a line
     void reflectBall(Ball ballA, Ball ballB, double t) {
         //move two ballA for same time
-        IO.out("\nreflect ball ball");
         ballA.move((long) t);
         ballB.move((long) t);
-        IO.out("reflect ball ball complete");
 
         //get two center of two ballA
         Point A = ballA.toPoint();
@@ -175,8 +164,6 @@ public class GameManagement extends Application {
             root.getChildren().add(line);
         }
 
-//        IO.out(checkIntersect(balls.get(1), lines.get(0), 1508461492500L));
-//        IO.out(balls.get(1).toPoint());
         AnimationTimer t = new AnimationTimer() {
             PriorityQueue<Collision> queue = new PriorityQueue<>();
 
@@ -192,15 +179,6 @@ public class GameManagement extends Application {
                     for (Line line : lines) {
                         if ((tmp = checkIntersect(ball, line, now)) >= 0) {
                             queue.add(new Collision(now - tmp * 1e9 - ball.pret, ball, line));
-                            IO.out("add to queue ball line: " + ball.toPoint());
-                        }
-                        if (distance(ball.toPoint(), line) < ball.getRadius()) {
-                            IO.out("position: " + ball.toPoint());
-                            IO.out("velocity: " + ball.v);
-                            IO.out("pre p: " + ball.prev);
-                            IO.out("pre time: " + ball.pret);
-                            IO.out("now: " + now);
-                            this.stop();
                         }
                     }
 
@@ -211,25 +189,18 @@ public class GameManagement extends Application {
                         }
                         if ((tmp = checkIntersect(ball, ballB, now)) >= 0) {
                             queue.add(new Collision(now - tmp * 1e9 - Math.max(ball.pret, ballB.pret), ball, ballB));
-                            IO.out("add to queue ball ball: " + ball.toPoint() + " " + ballB.toPoint());
                         }
                     }
                 }
 
                 while (!queue.isEmpty()) {
                     Collision cl = queue.poll();
-                    IO.out("poll to queue: " + cl.a.toPoint());
-                    IO.out("queue size: " + queue.size());
                     if (cl.b instanceof Line) {
                         tmp = checkIntersect(cl.a, (Line) cl.b, now);
                         if (tmp < 0 || (tmp >= 0 && Math.abs(Math.round(tmp * 1e9) - Math.round(now - cl.t - cl.a.pret)) > 1)) {
-                            if (tmp >= 0 && Math.abs(Math.round(tmp * 1e9) - Math.round(now - cl.t - cl.a.pret)) > 1) {
-                                IO.out("not equal time: " + Math.round(tmp * 1e9) + " " + Math.round(now - cl.t - cl.a.pret));
-                            }
                             continue;
                         }
                         reflectBall(cl.a, (Line) cl.b, now - cl.t);
-                        IO.out("accept: " + cl.a.toPoint());
 
                     } else if (cl.b instanceof Ball) {
                         tmp = checkIntersect(cl.a, (Ball) cl.b, now);
@@ -237,13 +208,11 @@ public class GameManagement extends Application {
                             continue;
                         }
                         reflectBall(cl.a, (Ball) cl.b, now - cl.t);
-                        IO.out("accept: " + cl.a.toPoint());
                     }
 
                     //check collision with line
                     for (Line line : lines) {
                         if ((tmp = checkIntersect(cl.a, line, now)) >= 0) {
-                            IO.out("add to queue ball line: " + cl.a.toPoint());
                             queue.add(new Collision(now - tmp * 1e9 - cl.a.pret, cl.a, line));
                         }
                     }
@@ -253,7 +222,6 @@ public class GameManagement extends Application {
                             continue;
                         }
                         if ((tmp = checkIntersect(cl.a, ballB, now)) >= 0) {
-                            IO.out("add to queue ball ball: " + cl.a.toPoint());
                             queue.add(new Collision(now - tmp * 1e9 - Math.max(cl.a.pret, ballB.pret), cl.a, ballB));
                         }
                     }
@@ -264,7 +232,6 @@ public class GameManagement extends Application {
                         //check collision with line
                         for (Line line : lines) {
                             if ((tmp = checkIntersect(ballA, line, now)) >= 0) {
-                                IO.out("add to queue ball line: " + ballA.toPoint());
                                 queue.add(new Collision(now - tmp * 1e9 - ballA.pret, ballA, line));
                             }
                         }
@@ -273,7 +240,6 @@ public class GameManagement extends Application {
                                 continue;
                             }
                             if ((tmp = checkIntersect(ballA, ballB, now)) >= 0) {
-                                IO.out("add to queue ball ball: " + ballA.toPoint());
                                 queue.add(new Collision(now - tmp * 1e9 - Math.max(ballA.pret, ballB.pret), ballA, ballB));
                             }
                         }
@@ -282,9 +248,7 @@ public class GameManagement extends Application {
 
                 //moving all ballA to current time
                 for (Ball ball : balls) {
-                    IO.out("\nmove ball");
                     ball.move(now);
-                    IO.out("move ball complete");
                 }
             }
         };
