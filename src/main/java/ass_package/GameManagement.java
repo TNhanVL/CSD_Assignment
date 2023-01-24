@@ -6,7 +6,9 @@ package ass_package;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.animation.AnimationTimer;
@@ -22,6 +24,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 
 /**
  *
@@ -33,6 +36,11 @@ public class GameManagement extends Application {
     static double friction = -400;
     static double ballRadius = 30;
     Stage graphStage;
+
+    boolean debug = false;
+
+    ArrayList<Ball> balls = new ArrayList<>();
+    ArrayList<Line> lines = new ArrayList<>();
 
     public GameManagement() {
     }
@@ -57,16 +65,115 @@ public class GameManagement extends Application {
         double b = -vector.getX();
         double c = -(a * line.getStartX() + b * line.getStartY());
 
-        //calculate when distance from ballA to line exact to ballA.radius
+        //calculate when distance from ballA to line exact to ballA.radius by equation degree 2
         //r = (ax + by + c) / sqrt(a^2 + b^2) => calculate t1
-        double t1 = (ball.getRadius() * Math.sqrt(a * a + b * b) - c - a * ball.getCenterX() - b * ball.getCenterY()) / (a * ball.v.getX() + b * ball.v.getY());
-        //r = -(ax + by + c) / sqrt(a^2 + b^2) => calculate t2
-        double t2 = (-ball.getRadius() * Math.sqrt(a * a + b * b) - c - a * ball.getCenterX() - b * ball.getCenterY()) / (a * ball.v.getX() + b * ball.v.getY());
+        //with x = x_0 + (v_x)t + 0.5(a_x)t;
+        double A = 0.5 * (a * ball.getAccelerate().getX() + b * ball.getAccelerate().getY());
+        A = 0;
+        double B = a * ball.getV().getX() + b * ball.getV().getY();
+        double C1 = -(ball.getRadius() * Math.sqrt(a * a + b * b) - c - a * ball.getCenterX() - b * ball.getCenterY());
+        double C2 = -(-ball.getRadius() * Math.sqrt(a * a + b * b) - c - a * ball.getCenterX() - b * ball.getCenterY());
 
-        return Math.min(t1, t2);
+        double t1 = EMath.optimalTimeOfIntersect(EMath.Equation2(A, B, C1));
+        //r = -(ax + by + c) / sqrt(a^2 + b^2) => calculate t2
+        double t2 = EMath.optimalTimeOfIntersect(EMath.Equation2(A, B, C2));
+
+        return EMath.optimalTimeOfIntersect(t1, t2);
     }
 
-    //calculate time until ballA and line intersect
+    //calculate time until ballA and ballB intersect with accelerate
+//    double timeToIntersect(Ball ballA, Ball ballB) {
+//        long pret = Math.max(ballA.pret, ballB.pret);
+//        Ball A = new Ball(ballA);
+//        Ball B = new Ball(ballB);
+//
+//        //move two ballA for same time
+//        A.move(pret);
+//        B.move(pret);
+//
+//        //get Accelerate
+//        double a_xA = A.getAccelerate().getX();
+//        double a_yA = A.getAccelerate().getY();
+//        double a_xB = B.getAccelerate().getX();
+//        double a_yB = B.getAccelerate().getY();
+//
+//        //get velocity
+//        double v_xA = A.getV().getX();
+//        double v_yA = A.getV().getY();
+//        double v_xB = B.getV().getX();
+//        double v_yB = B.getV().getY();
+//
+//        //get position
+//        double x_0A = A.getCenterX();
+//        double y_0A = A.getCenterY();
+//        double x_0B = B.getCenterX();
+//        double y_0B = B.getCenterY();
+//
+//        //cal radius
+//        double r = A.getRadius() + B.getRadius();
+//
+//        //a*t^4 + b*t^3 + c*t^2 + d*t + e == 0        
+//        double a = 0.25 * a_xA * a_xA
+//                - 0.5 * a_xA * a_xB
+//                + 0.25 * a_xB * a_xB
+//                + 0.25 * a_yA * a_yA
+//                - 0.5 * a_yA * a_yB
+//                + 0.25 * a_yB * a_yB;
+//
+//        double b = 1 * a_xA * v_xA
+//                - 1 * a_xA * v_xB
+//                - 1 * a_xB * v_xA
+//                + 1 * a_xB * v_xB
+//                + 1 * a_yA * v_yA
+//                - 1 * a_yA * v_yB
+//                - 1 * a_yB * v_yA
+//                + 1 * a_yB * v_yB;
+//
+//        double c = 1 * a_xA * x_0A
+//                - 1 * a_xA * x_0B
+//                - 1 * a_xB * x_0A
+//                + 1 * a_xB * x_0B
+//                + 1 * a_yA * y_0A
+//                - 1 * a_yA * y_0B
+//                - 1 * a_yB * y_0A
+//                + 1 * a_yB * y_0B
+//                + 1 * v_xA * v_xA
+//                - 2 * v_xA * v_xB
+//                + 1 * v_xB * v_xB
+//                + 1 * v_yA * v_yA
+//                - 2 * v_yA * v_yB
+//                + 1 * v_yB * v_yB;
+//
+//        double d = 2 * v_xA * x_0A
+//                - 2 * v_xA * x_0B
+//                - 2 * v_xB * x_0A
+//                + 2 * v_xB * x_0B
+//                + 2 * v_yA * y_0A
+//                - 2 * v_yA * y_0B
+//                - 2 * v_yB * y_0A
+//                + 2 * v_yB * y_0B;
+//
+//        double e = 1 * x_0A * x_0A
+//                - 2 * x_0A * x_0B
+//                + 1 * x_0B * x_0B
+//                + 1 * y_0A * y_0A
+//                - 2 * y_0A * y_0B
+//                + 1 * y_0B * y_0B
+//                - r * r;
+//
+////        IO.out(EMath.Equation4(a, b, c, d, e));
+////        if (A.toPoint().distance(B.toPoint()) < 70) {
+////            IO.out(EMath.Equation4(a, b, c, d, e));
+////            IO.out(EMath.optimalTimeOfIntersect(EMath.Equation4(a, b, c, d, e)));
+////            IO.out(ballA.getV() + " " + ballB.getV());
+////        }
+////        IO.out(a + " " + b + " " + c + " " + d + " " + e);
+////        double i = EMath.optimalTimeOfIntersect(EMath.Equation4(a, b, c, d, e));
+////        IO.out(Math.sqrt(i * i * i * i * a + i * i * i * b + i * i * c + i * d + e + r * r));
+////        IO.out("pos: " + (y_0B + v_yB*i + 0.5*a_yB*i*i));
+//        return EMath.optimalTimeOfIntersect(EMath.Equation4(a, b, c, d, e));
+//    }
+    //calculate time until ballA and ballB intersect with accelerate
     double timeToIntersect(Ball ballA, Ball ballB) {
         long pret = Math.max(ballA.pret, ballB.pret);
         Ball A = new Ball(ballA);
@@ -80,7 +187,7 @@ public class GameManagement extends Application {
         double cx = B.getCenterX() - A.getCenterX();
         double cy = B.getCenterY() - A.getCenterY();
         double r = A.getRadius() + B.getRadius();
-        Point v = B.v.sub(A.v);
+        Point v = B.getV().sub(A.getV());
 
         //vx^2 + vy^2
         double vxvy = v.getX() * v.getX() + v.getY() * v.getY();
@@ -113,14 +220,28 @@ public class GameManagement extends Application {
     void reflectBall(Ball ball, Line line, double t) {
         ball.move((long) t);
         Point n = new Point(line.getStartX() - line.getEndX(), line.getStartY() - line.getEndY()).rotate().unit();
-        ball.v = ball.v.sub(n.mul(n.dot(ball.v)).mul(2));
+        ball.v = ball.getV().sub(n.mul(n.dot(ball.getV())).mul(2));
     }
 
-    //reflect ballA when collision a line
+    //reflect ballA when collision a ball
     void reflectBall(Ball ballA, Ball ballB, double t) {
         //move two ballA for same time
+        double pret = Math.max(ballA.pret, ballB.pret);
+        if (t > pret) {
+            t--;
+        }
         ballA.move((long) t);
         ballB.move((long) t);
+
+        //debug
+//        if (ballA.toPoint().distance(ballB.toPoint()) < 60) {
+//            debug = true;
+//            IO.out(ballA.pre);
+//            IO.out(ballA.getV());
+//            IO.out(ballB.pre);
+//            IO.out(ballB.getV());
+//            IO.out(ballA.pre.distance(ballB.pre));
+//        }
 
         //get two center of two ballA
         Point A = ballA.toPoint();
@@ -131,59 +252,17 @@ public class GameManagement extends Application {
         Point BA = A.sub(B).unit();
 
         //velocity
-        Point vB = AB.mul(ballA.v.dot(AB));
-        Point vA = BA.mul(ballB.v.dot(BA));
+        Point vB = AB.mul(ballA.getV().dot(AB));
+        Point vA = BA.mul(ballB.getV().dot(BA));
 
-        Point vtA = ballA.v.sub(vB);
-        Point vtB = ballB.v.sub(vA);
+        Point vtA = ballA.getV().sub(vB);
+        Point vtB = ballB.getV().sub(vA);
 
         ballA.v = vA.add(vtA);
         ballB.v = vB.add(vtB);
     }
 
-    @Override
-    public void start(Stage primaryStage) {
-        Group root = new Group();
-        Scene scene = new Scene(root, 600, 600);
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("Magic");
-        primaryStage.show();
-
-        primaryStage.setOnCloseRequest(e -> {
-            graphStage.show();
-        });
-
-        ArrayList<Ball> balls = new ArrayList<>();
-        balls.add(new Ball(41, 120, ballRadius, Color.BLACK, System.nanoTime()));
-        balls.get(0).v = new Point(1000, 700);
-        for (int i = 1; i <= 10; i++) {
-            Ball a = new Ball(41 + i * 31, 550 - i * 31, ballRadius, Color.RED, System.nanoTime());
-            a.v = new Point(i * 200, i * 200);
-            balls.add(a);
-        }
-//        balls.get(1).pret = 1508444823700L;
-
-        for (Ball ball : balls) {
-            root.getChildren().add(ball);
-        }
-
-        ArrayList<Line> lines = new ArrayList<>();
-        lines.add(new Line(10, 10, scene.getWidth() - 10, 10));
-        lines.add(new Line(10, 10, 10, scene.getHeight() - 10));
-        lines.add(new Line(scene.getWidth() - 10, 10, scene.getWidth() - 10, scene.getHeight() - 10));
-        lines.add(new Line(10, scene.getHeight() - 10, scene.getWidth() - 10, scene.getHeight() - 10));
-
-        for (Line line : lines) {
-            root.getChildren().add(line);
-        }
-
-        scene.setOnMouseClicked((MouseEvent e) -> {
-            Point p = new Point(e.getX(), e.getY());
-            p = p.sub(balls.get(0).toPoint()).unit().mul(1000);
-            balls.get(0).v = p;
-
-        });
-
+    void startGameTimer() {
         AnimationTimer t = new AnimationTimer() {
             PriorityQueue<Collision> queue = new PriorityQueue<>();
 
@@ -215,6 +294,12 @@ public class GameManagement extends Application {
 
                 while (!queue.isEmpty()) {
                     Collision cl = queue.poll();
+//                    IO.out("");
+//                    if (cl.b instanceof Ball) {
+//                        IO.out("Ball reflect");
+//                    } else {
+//                        IO.out("Line reflect");
+//                    }
                     if (cl.b instanceof Line) {
                         tmp = checkIntersect(cl.a, (Line) cl.b, now);
                         if (tmp < 0 || (tmp >= 0 && Math.abs(Math.round(tmp * 1e9) - Math.round(now - cl.t - cl.a.pret)) > 1)) {
@@ -225,9 +310,22 @@ public class GameManagement extends Application {
                     } else if (cl.b instanceof Ball) {
                         tmp = checkIntersect(cl.a, (Ball) cl.b, now);
                         if (tmp < 0 || (tmp >= 0 && Math.abs(Math.round(tmp * 1e9) - Math.round(now - cl.t - Math.max(cl.a.pret, ((Ball) cl.b).pret))) > 1)) {
+//                            IO.out("no");
                             continue;
                         }
+//                        IO.out(now - cl.t - cl.a.pret);
+//                        IO.out(cl.a);
+//                        IO.out(cl.b);
+//                        IO.out(cl.a.getV());
+//                        IO.out(((Ball) cl.b).getV());
+//                        IO.out("distance: " + cl.a.toPoint().distance(((Ball)cl.b).toPoint()));
                         reflectBall(cl.a, (Ball) cl.b, now - cl.t);
+//                        IO.out(cl.a);
+//                        IO.out(cl.b);
+//                        IO.out(cl.a.getV());
+//                        IO.out(((Ball) cl.b).getV());
+//                        IO.out("distance: " + cl.a.toPoint().distance(((Ball)cl.b).toPoint()));
+//                        IO.out("");
                     }
 
                     //check collision with line
@@ -270,10 +368,64 @@ public class GameManagement extends Application {
                 for (Ball ball : balls) {
                     ball.move(now);
                 }
+
+                if (debug) {
+                    this.stop();
+                }
+//                this.stop();
             }
         };
         t.start();
+    }
 
+    @Override
+    public void start(Stage primaryStage) {
+        Group root = new Group();
+        Scene scene = new Scene(root, 600, 600);
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("Magic");
+        primaryStage.show();
+
+        primaryStage.setOnCloseRequest(e -> {
+            if (graphStage != null) {
+                graphStage.show();
+            }
+        });
+
+        long now = System.nanoTime();
+
+        balls.add(new Ball(90, 90, ballRadius, Color.BLACK, now));
+        balls.get(0).v = new Point(0.12289017114034095, -1.5893042145205207);
+
+//        IO.out(balls.get(0).toPoint().distance(balls.get(1).toPoint()));
+//        IO.out(timeToIntersect(balls.get(0), balls.get(1)));
+//        IO.out(checkIntersect(balls.get(0), balls.get(1), (long) now + 16666666));
+        for (int i = 1; i <= 8; i++) {
+            Ball a = new Ball(41 + i * 61, 550 - i * 61, ballRadius, Color.RED, System.nanoTime());
+            a.v = new Point(i * 200, i * 200);
+            balls.add(a);
+        }
+
+        for (Ball ball : balls) {
+            root.getChildren().add(ball);
+        }
+
+        lines.add(new Line(10, 10, scene.getWidth() - 10, 10));
+        lines.add(new Line(10, 10, 10, scene.getHeight() - 10));
+        lines.add(new Line(scene.getWidth() - 10, 10, scene.getWidth() - 10, scene.getHeight() - 10));
+        lines.add(new Line(10, scene.getHeight() - 10, scene.getWidth() - 10, scene.getHeight() - 10));
+
+        for (Line line : lines) {
+            root.getChildren().add(line);
+        }
+
+        scene.setOnMouseClicked((MouseEvent e) -> {
+            Point p = new Point(e.getX(), e.getY());
+            p = p.sub(balls.get(0).toPoint()).unit().mul(2000);
+            balls.get(0).v = p;
+        });
+
+        startGameTimer();
     }
 
     public static void main(String[] args) {

@@ -171,7 +171,7 @@ public class PrimaryController {
     @FXML
     private void getTextInput(KeyEvent event) {
         try {
-            ArrayList<Point> a = Point.converToPoints(textInput.getText().split("[ \n]"));
+            ArrayList<Point> a = Point.converToPoints(textInput.getText().split("[\n]"));
             Convex.Convex(a);
 //            System.out.println(Convex.points);
             canvas1.draw();
@@ -222,6 +222,7 @@ public class PrimaryController {
         GameManagement game = new GameManagement(App.graphStage);
         Stage stage = new Stage();
         App.graphStage.hide();
+        
         game.start(stage);
     }
 

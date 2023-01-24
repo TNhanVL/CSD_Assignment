@@ -5,19 +5,31 @@
 package ass_package;
 
 import java.util.PriorityQueue;
+import java.util.Random;
 
 /**
  *
  * @author TTNhan
  */
 public class Test {
+
     public static void main(String[] args) {
-        PriorityQueue<Collision> queue = new PriorityQueue<>();
-        queue.add(new Collision(1.3456345634));
-        queue.add(new Collision(1.83456345634));
-        queue.add(new Collision(1.1345324254));
-        while(!queue.isEmpty()){
-            IO.out(queue.poll().t);
+        Random rand = new Random();
+        int mod = 100;
+
+        while (true) {
+            double a = rand.nextInt() % mod;
+            double b = rand.nextInt() % mod;
+            double c = rand.nextInt() % mod;
+            double d = rand.nextInt() % mod;
+            double e = rand.nextInt() % mod;
+//            double[] arr = EMath.Equation4(a, b, c, d, e);
+            double[] arr = EMath.Equation4(40000.0, -498539.85599999997, 1580187.4251281293, -167010.85176, 889.0);
+            for (double i : arr) {
+                IO.out(i);
+            }
+            IO.out(a + " " + b + " " + c + " " + d + " " + e);
+            break;
         }
     }
 }

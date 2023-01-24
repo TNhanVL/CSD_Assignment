@@ -14,8 +14,8 @@ public class GraphManagement {
 
     public static Color convexColor = Color.RED;
     public static Color pointColor = Color.BLACK;
-    public static int pointRadius = 7;
-    public static int lineWeight = 5;
+    public static int pointRadius = 12;
+    public static int lineWeight = 8;
     public static int NumberOfRandomVertex = 10;
     public static int maxRandomCoordinare = 100;
 

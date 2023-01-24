@@ -24,6 +24,11 @@ public class Point {
         this.y = y;
     }
 
+    public Point(Point p) {
+        this.x = p.x;
+        this.y = p.y;
+    }
+
     public double getX() {
         return x;
     }
@@ -96,7 +101,7 @@ public class Point {
 
     @Override
     public String toString() {
-        return "Point{" + "x=" + x + ", y=" + y + '}';
+        return "Point{" + x + ", " + y + '}';
     }
 
     @Override
@@ -123,18 +128,15 @@ public class Point {
         return Math.abs(this.y - other.y) < 1e-6;
     }
 
-    public static ArrayList<Point> converToPoints(String[] s) throws Exception {
-        if (s.length % 2 == 1) {
-            throw new Exception();
-        }
+    public static ArrayList<Point> converToPoints(String[] s) {
         ArrayList<Point> a = new ArrayList<>();
-        for (int i = 0, j = 1; j < s.length; i += 2, j += 2) {
+        for (String item : s) {
             try {
-                double u = Double.parseDouble(s[i]);
-                double v = Double.parseDouble(s[j]);
+                String[] t = item.split(" ");
+                double u = Double.parseDouble(t[0]);
+                double v = Double.parseDouble(t[1]);
                 a.add(new Point(u, v));
             } catch (NumberFormatException e) {
-                throw e;
             }
         }
         return a;

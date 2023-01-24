@@ -4,6 +4,7 @@
  */
 package ass_package;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.LinkedList;
@@ -66,6 +67,13 @@ public class IO {
         return s;
     }
 
+    public static void out(double[] a) {
+        for(double i: a){
+            System.out.print(i + " ");
+        }
+        System.out.println();
+    }
+    
     public static void out(Object msg) {
         System.out.println(msg);
     }

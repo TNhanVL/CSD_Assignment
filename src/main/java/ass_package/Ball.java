@@ -15,6 +15,7 @@ public class Ball extends Circle {
 
     Point v = new Point();
     long pret = -1;
+    Point pre = new Point();
 
     public Ball(double d, double d1, double d2, Paint paint, long pret) {
         super(d, d1, d2, paint);
@@ -28,13 +29,34 @@ public class Ball extends Circle {
         this.v = ball.v.clone();
     }
 
+    public void setCenter(Point p) {
+        this.setCenterX(p.getX());
+        this.setCenterY(p.getY());
+    }
+
     public Point toPoint() {
         return new Point(this.getCenterX(), this.getCenterY());
     }
 
     //check it not move
     public boolean stand() {
-        return v.distance(new Point()) <= 0.1;
+        return v.distance(new Point()) <= 1;
+    }
+
+    public Point getAccelerate() {
+        if (stand()) {
+            return new Point();
+        }
+        Point a = v.unit().mul(GameManagement.friction);
+//        a.addY(500.0);
+        return a;
+    }
+    
+    public Point getV() {
+        if (stand()) {
+            return new Point();
+        }
+        return v;
     }
 
     /**
@@ -49,12 +71,14 @@ public class Ball extends Circle {
         }
         double t = (now - pret) / 1e9;
         pret = now;
+        pre = toPoint();
 
-        Point a = v.unit().mul(GameManagement.friction);
-//        a = a.add(new Point(0, 1000));
+        Point a = getAccelerate();
 
         double sx = 0.5 * a.getX() * t * t + t * v.getX();
         double sy = 0.5 * a.getY() * t * t + t * v.getY();
+//        double sx = t * v.getX();
+//        double sy = t * v.getY();
         v.setX(v.getX() + a.getX() * t);
         v.setY(v.getY() + a.getY() * t);
 
