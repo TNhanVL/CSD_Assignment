@@ -1,0 +1,5 @@
+# NetBeans specific #
+build/
+nbproject/
+dist/
+test/
