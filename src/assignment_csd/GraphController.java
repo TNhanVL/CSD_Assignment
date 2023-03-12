@@ -28,7 +28,7 @@ import javafx.stage.Stage;
  *
  * @author TTNhan
  */
-public class PrimaryController {
+public class GraphController {
 
     ResizableCanvas canvas1 = new ResizableCanvas();
 
@@ -54,13 +54,18 @@ public class PrimaryController {
         canvas1.setTranslateX(1);
         canvas1.setTranslateY(1);
 
-        //click on canvas to add new point
+        //Click action
         canvas1.setOnMouseClicked((MouseEvent e) -> {
+            //Secondary mouse button
             if (GraphManagement.clickToAddPoint && e.getButton() == MouseButton.SECONDARY) {
                 Point point = GraphManagement.getPoint(e.getX(), e.getY());
                 Convex.addPoint(point);
                 textInput.setText(textInput.getText() + point.getX() + " " + point.getY() + "\n");
                 canvas1.draw();
+            }
+            //Primary mouse button
+            if (GraphManagement.clickToAddPoint && e.getButton() == MouseButton.PRIMARY) {
+                
             }
         });
 
@@ -120,6 +125,7 @@ public class PrimaryController {
 //            System.out.println(e);
         });
 
+        //Moust scroll
         canvas1.setOnScroll((ScrollEvent e) -> {
             double t = e.getDeltaY();
             double x = e.getX() - GraphManagement.canvasWidth / 2;

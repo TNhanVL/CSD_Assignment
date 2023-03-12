@@ -37,6 +37,7 @@ public class GraphManagement {
     public static boolean released = true;
 
     public static int markPointIndex = -1;
+    public static int selectedPointIndex = -1;
 
     public static Point getPoint(double x, double y) {
         double u = (x - moveX - canvasWidth / 2) / zoom + middleX;
