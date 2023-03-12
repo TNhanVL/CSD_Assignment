@@ -27,7 +27,7 @@ public class Assignment_CSD extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("primary"), 1280, 800);
+        scene = new Scene(loadFXML("graph"), 1280, 800);
         stage.setScene(scene);
         stage.setTitle("Geometry computing");
         stage.setMinWidth(600);

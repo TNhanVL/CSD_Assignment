@@ -63,6 +63,10 @@ public class GraphController {
                 textInput.setText(textInput.getText() + point.getX() + " " + point.getY() + "\n");
                 canvas1.draw();
             }
+            //Primary mouse button
+            if (GraphManagement.clickToAddPoint && e.getButton() == MouseButton.PRIMARY) {
+                
+            }
         });
 
         //move graph
