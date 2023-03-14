@@ -179,7 +179,7 @@ public class GraphController {
         colorPickerConvex.setValue(graph.convexColor);
         colorPickerPoint.setValue(graph.pointColor);
         slider.setMin(2);
-        slider.setMax(1000);
+        slider.setMax(100);
         slider.setValue(graph.NumberOfRandomVertex);
         textFieldNNumberOfVertex.setText(String.valueOf(graph.NumberOfRandomVertex));
     }

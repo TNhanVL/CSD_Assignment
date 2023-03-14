@@ -24,7 +24,7 @@ public class GraphManagement {
     public int coorAxisWeight = 1;
     public int coorAxisFontSize = 12;
     public int NumberOfRandomVertex = 10;
-    public int maxRandomCoordinare = 100;
+    public int maxRandomCoordinare = 10;
 
     public double paddingOfGraph = 0.1; //percent
     public double gapBetweenLabel = 100;

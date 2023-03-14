@@ -12,43 +12,49 @@
 
 <AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="assignment_csd.GraphController">
    <children>
-      <TabPane layoutY="6.0" prefHeight="794.0" prefWidth="1280.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <tabs>
-          <Tab text="Main">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                     <children>
-                        <Pane fx:id="paneCanvas" prefHeight="731.0" prefWidth="1035.0" style="-fx-border-color: BLACK; -fx-border-width: 1px;" AnchorPane.bottomAnchor="11.0" AnchorPane.leftAnchor="235.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="58.0" />
-                        <AnchorPane prefHeight="800.0" prefWidth="232.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <children>
-                              <ColorPicker fx:id="colorPickerPoint" layoutX="117.0" layoutY="57.0" onAction="#pickPointColor" prefHeight="31.0" prefWidth="97.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                              </ColorPicker>
-                              <Label layoutX="31.0" layoutY="15.0" text="Point Color: " AnchorPane.rightAnchor="112.0" AnchorPane.topAnchor="15.0" />
-                              <ColorPicker fx:id="colorPickerConvex" layoutX="117.0" layoutY="183.0" onAction="#pickConvexColor" prefHeight="31.0" prefWidth="97.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="50.0" />
-                              <Label layoutX="14.0" layoutY="55.0" text="Convex Color: " AnchorPane.rightAnchor="112.0" AnchorPane.topAnchor="55.0" />
-                              <TextArea fx:id="textInput" layoutX="16.0" layoutY="217.0" onKeyReleased="#getTextInput" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="10.0" AnchorPane.topAnchor="217.0" />
-                              <Label layoutX="17.0" layoutY="189.0" text="Input: " AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="189.0" />
-                              <Slider fx:id="slider" layoutX="14.0" layoutY="163.0" onMouseClicked="#sliderNumberOfVertex" onMouseDragged="#sliderNumberOfVertex" prefHeight="18.0" prefWidth="124.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="163.0" />
-                              <Label layoutX="11.0" layoutY="133.0" text="Number of vertex: " AnchorPane.leftAnchor="11.0" AnchorPane.topAnchor="133.0" />
-                              <TextField fx:id="textFieldNNumberOfVertex" layoutX="160.0" layoutY="128.0" onKeyReleased="#textFieldNNumberOfVertex" prefHeight="31.0" prefWidth="76.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="128.0" />
-                              <Button layoutX="146.0" layoutY="166.0" mnemonicParsing="false" onAction="#randomButton" prefHeight="31.0" prefWidth="76.0" text="Random" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="166.0" />
-                              <Button layoutX="125.0" layoutY="89.0" mnemonicParsing="false" onAction="#resetScreen" prefHeight="25.0" prefWidth="97.0" text="Fit Screen" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="89.0" />
-                           </children>
-                        </AnchorPane>
-                        <Button layoutX="1214.0" layoutY="14.0" mnemonicParsing="false" onAction="#magicButton" text="Magic" />
-                     </children>
-                  </AnchorPane>
-            </content>
-          </Tab>
-          <Tab text="About">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-            </content>
-          </Tab>
-        </tabs>
-      </TabPane>
+      <AnchorPane layoutY="27.0" prefHeight="773.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
+         <children>
+            <Pane fx:id="paneCanvas" prefHeight="731.0" prefWidth="1035.0" style="-fx-border-color: BLACK; -fx-border-width: 1px;" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="235.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="58.0" />
+            <AnchorPane prefHeight="800.0" prefWidth="232.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <ColorPicker fx:id="colorPickerPoint" layoutX="117.0" layoutY="57.0" onAction="#pickPointColor" prefHeight="31.0" prefWidth="97.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                  </ColorPicker>
+                  <Label layoutX="31.0" layoutY="15.0" text="Point Color: " AnchorPane.rightAnchor="112.0" AnchorPane.topAnchor="15.0" />
+                  <ColorPicker fx:id="colorPickerConvex" layoutX="117.0" layoutY="183.0" onAction="#pickConvexColor" prefHeight="31.0" prefWidth="97.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="50.0" />
+                  <Label layoutX="14.0" layoutY="55.0" text="Convex Color: " AnchorPane.rightAnchor="112.0" AnchorPane.topAnchor="55.0" />
+                  <TextArea fx:id="textInput" layoutX="16.0" layoutY="217.0" onKeyReleased="#getTextInput" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="10.0" AnchorPane.topAnchor="217.0" />
+                  <Label layoutX="17.0" layoutY="189.0" text="Input: " AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="189.0" />
+                  <Slider fx:id="slider" layoutX="14.0" layoutY="163.0" onMouseClicked="#sliderNumberOfVertex" onMouseDragged="#sliderNumberOfVertex" prefHeight="18.0" prefWidth="124.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="163.0" />
+                  <Label layoutX="11.0" layoutY="133.0" text="Number of vertex: " AnchorPane.leftAnchor="11.0" AnchorPane.topAnchor="133.0" />
+                  <TextField fx:id="textFieldNNumberOfVertex" layoutX="160.0" layoutY="128.0" onKeyReleased="#textFieldNNumberOfVertex" prefHeight="31.0" prefWidth="76.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="128.0" />
+                  <Button layoutX="146.0" layoutY="166.0" mnemonicParsing="false" onAction="#randomButton" prefHeight="31.0" prefWidth="76.0" text="Random" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="166.0" />
+                  <Button layoutX="125.0" layoutY="89.0" mnemonicParsing="false" onAction="#resetScreen" prefHeight="25.0" prefWidth="97.0" text="Fit Screen" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="89.0" />
+               </children>
+            </AnchorPane>
+            <Button layoutX="1217.0" layoutY="14.0" mnemonicParsing="false" onAction="#magicButton" text="Magic" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" />
+         </children>
+      </AnchorPane>
+      <MenuBar layoutY="2.0" prefHeight="25.0" prefWidth="1280.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Close" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Edit">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Delete" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
    </children>
 </AnchorPane>
