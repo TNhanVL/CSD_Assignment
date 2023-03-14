@@ -65,7 +65,7 @@ public class GraphController {
                     graph.deletePoint(graph.markPointIndex);
                     String input = "";
                     for (int i = 0; i < graph.points.size(); i++) {
-                        input += String.valueOf(graph.points.get(i).getX()) + " " + String.valueOf(graph.points.get(i).getY()) + "\n";
+                        input += graph.points.get(i).to_String() + "\n";
                     }
                     textInput.setText(input);
                     canvas.draw();
@@ -76,7 +76,7 @@ public class GraphController {
                     Point point = graph.getPoint(e.getX(), e.getY());
                     graph.markPointIndex = graph.points.size();
                     graph.addPoint(point);
-                    textInput.setText(textInput.getText() + point.getX() + " " + point.getY() + "\n");
+                    textInput.setText(textInput.getText() + point.to_String() + "\n");
                     canvas.draw();
                 }
             }
@@ -104,7 +104,7 @@ public class GraphController {
 
                     //show point in input textfield
                     String[] s = textInput.getText().split("\n");
-                    s[graph.markPointIndex] = p1.getX() + " " + p1.getY();
+                    s[graph.markPointIndex] = p1.to_String();
                     textInput.setText(String.join("\n", s) + "\n");
                 }
             }
@@ -227,7 +227,7 @@ public class GraphController {
         ArrayList<Point> a = new ArrayList<>(s);
         String input = "";
         for (int i = 0; i < a.size(); i++) {
-            input += String.valueOf(a.get(i).getX()) + " " + String.valueOf(a.get(i).getY()) + "\n";
+            input += a.get(i).to_String() + "\n";
         }
         textInput.setText(input);
         graph.setPoints(a);

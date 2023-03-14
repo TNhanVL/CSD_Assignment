@@ -94,6 +94,10 @@ public class Point {
         return Math.sqrt(p1.dot(p1));
     }
 
+    public String to_String() {
+        return Math.round(x * 1000) / 1000.0 + " " + Math.round(y * 1000) / 1000.0;
+    }
+
     @Override
     public Point clone() {
         return new Point(x, y);
