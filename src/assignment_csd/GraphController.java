@@ -63,16 +63,18 @@ public class GraphController {
                 if (graph.markPointIndex != -1) {
 //                    IO.out("Deleting : " + graph.markPointIndex);
                     graph.deletePoint(graph.markPointIndex);
-                    graph.markPointIndex = -1;
                     String input = "";
                     for (int i = 0; i < graph.points.size(); i++) {
                         input += String.valueOf(graph.points.get(i).getX()) + " " + String.valueOf(graph.points.get(i).getY()) + "\n";
                     }
                     textInput.setText(input);
                     canvas.draw();
+                    graph.markPointIndex = findHoverVertexIndex(e.getX(), graph.canvasHeight - e.getY());
+                    canvas.draw();
                 } else {
                     //Try to add a new Point
                     Point point = graph.getPoint(e.getX(), e.getY());
+                    graph.markPointIndex = graph.points.size();
                     graph.addPoint(point);
                     textInput.setText(textInput.getText() + point.getX() + " " + point.getY() + "\n");
                     canvas.draw();
@@ -125,15 +127,7 @@ public class GraphController {
 //            System.out.println(x + " " + y);
 //            System.out.println(ResizableCanvas.points);
             int preIndex = graph.markPointIndex;
-            graph.markPointIndex = -1;
-            int index = 0;
-            for (Point point : ResizableCanvas.points) {
-                if (point.distance(new Point(x, y)) <= graph.pointRadius) {
-                    graph.markPointIndex = index;
-                    break;
-                }
-                index++;
-            }
+            graph.markPointIndex = findHoverVertexIndex(x, y);
             if (preIndex != graph.markPointIndex) {
                 canvas.draw();
             }
@@ -165,6 +159,19 @@ public class GraphController {
             }
             canvas.draw();
         });
+    }
+
+    int findHoverVertexIndex(double x, double y) {
+        int find = -1;
+        int index = 0;
+        for (Point point : ResizableCanvas.points) {
+            if (point.distance(new Point(x, y)) <= graph.pointRadius) {
+                find = index;
+                break;
+            }
+            index++;
+        }
+        return find;
     }
 
     public void initialize() {

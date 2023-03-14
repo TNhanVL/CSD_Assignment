@@ -55,8 +55,24 @@ public class ResizableCanvas extends Canvas {
             minY = Math.min(minY, graph.convexPoints.get(i).getY());
             maxY = Math.max(maxY, graph.convexPoints.get(i).getY());
         }
+        if (graph.points.isEmpty()) {
+            graph.zoom = 1;
+            minX = -graph.canvasWidth / 2;
+            maxX = graph.canvasWidth / 2;
+            minY = -graph.canvasHeight / 2;
+            maxY = graph.canvasHeight / 2;
+        }
+        if (graph.points.size() == 1) {
+            graph.zoom = 1;
+            minX -= graph.canvasWidth / 2;
+            maxX += graph.canvasWidth / 2;
+            minY -= graph.canvasHeight / 2;
+            maxY += graph.canvasHeight / 2;
+        }
+
         graph.middleX = (minX + maxX) / 2;
         graph.middleY = (minY + maxY) / 2;
+
         graph.zoom = Math.min(graph.canvasWidth * (1 - graph.paddingOfGraph * 2) / (maxX - minX), graph.canvasHeight * (1 - graph.paddingOfGraph * 2) / (maxY - minY));
     }
 
@@ -84,19 +100,17 @@ public class ResizableCanvas extends Canvas {
         gc.setFill(Color.WHITE);
         gc.fillRect(0, 0, graph.canvasWidth, graph.canvasHeight);
 
-        points = new ArrayList<>();
-        convexPoints = new ArrayList<>();
+        if (graph.convexPoints.isEmpty()) {
+            graph.zoom = 1;
+        }
 
-        if (graph.points.size() >= 2 && graph.reCalZoom) {
+        if (graph.reCalZoom) {
             calToFitScreen();
         }
 
-        if (graph.points.size() >= 2) {
-            points = getPoint(graph.points);
-            convexPoints = getPoint(graph.convexPoints);
-        } else if (graph.points.size() == 1) {
-            points.add(new Point(graph.canvasWidth / 2, graph.canvasHeight / 2));
-        }
+        points = getPoint(graph.points);
+        convexPoints = getPoint(graph.convexPoints);
+
         //draw convex polygon
         for (int i = 0; i < convexPoints.size(); i++) {
             drawLine(convexPoints.get(i), convexPoints.get((i + 1) % convexPoints.size()), gc, graph.convexColor);
@@ -105,21 +119,15 @@ public class ResizableCanvas extends Canvas {
         for (int i = 0; i < points.size(); i++) {
             drawPoint(points.get(i), graph.pointRadius, gc, graph.pointColor);
         }
-        if (graph.markPointIndex != -1) {
+        if (0 <= graph.markPointIndex && graph.markPointIndex < graph.points.size()) {
             Point point = points.get(graph.markPointIndex);
             drawPoint(point, graph.pointRadius + 1, gc, graph.pointColor);
             drawPoint(point, graph.pointRadius, gc, graph.convexColor);
         }
-        double area = 0;
-        if (graph.convexPoints.size() >= 2) {
-            for (int i = 0, j = 1; i < graph.convexPoints.size(); i++, j = (j + 1) % convexPoints.size()) {
-                area += (graph.convexPoints.get(i).getY() - graph.convexPoints.get(j).getY()) * (graph.convexPoints.get(j).getX() + graph.convexPoints.get(i).getX());
-            }
-        }
-        area = Math.abs(area) / 2;
+
         gc.setLineWidth(1);
         gc.setStroke(Color.BLACK);
-        gc.strokeText("Convex Polygon Area: " + area, 10, 20);
+        gc.strokeText("Convex Polygon Area: " + graph.calConvexArea(), 10, 20);
     }
 
     void resetScreen() {
@@ -142,9 +150,5 @@ public class ResizableCanvas extends Canvas {
     @Override
     public double prefHeight(double width) {
         return getHeight();
-    }
-
-    void setOnMouseDragEntered() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

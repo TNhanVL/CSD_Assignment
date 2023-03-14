@@ -52,15 +52,32 @@ public class GraphManagement {
         points.add(p);
         convexPoints = Convex.ConvexHull(points);
     }
-    
-    public void deletePoint(int index){
-        points.remove(index);
-        convexPoints = Convex.ConvexHull(points);
+
+    public void deletePoint(int index) {
+        try {
+            points.remove(index);
+            convexPoints = Convex.ConvexHull(points);
+        } catch (Exception e) {
+            IO.out(e);
+        }
     }
 
     public void updatePoint(int index, Point p) {
         points.set(index, p);
         convexPoints = Convex.ConvexHull(points);
+    }
+
+    public double calConvexArea() {
+        if (this.convexPoints.size() <= 2) {
+            return 0;
+        }
+        double area = 0;
+
+        for (int i = 0, j = 1; i < convexPoints.size(); i++, j = (j + 1) % convexPoints.size()) {
+            area += (convexPoints.get(i).getY() - convexPoints.get(j).getY()) * (convexPoints.get(j).getX() + convexPoints.get(i).getX());
+        }
+
+        return Math.abs(area) / 2;
     }
 
     public Point getPoint(double x, double y) {
