@@ -16,6 +16,10 @@ public class Convex {
 
     public static ArrayList<Point> ConvexHull(ArrayList<Point> points) {
 
+        if (points.size() <= 2) {
+            return new ArrayList<>(points);
+        }
+
         Set<Point> s = new HashSet<>(points);
 
         ArrayList<Point> pointList = new ArrayList<>(s);

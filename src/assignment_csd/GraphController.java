@@ -59,10 +59,19 @@ public class GraphController {
         canvas.setOnMouseClicked((MouseEvent e) -> {
             //Secondary mouse button
             if (graph.clickToAddPoint && e.getButton() == MouseButton.SECONDARY) {
-                //If hoving a vertice
+                //If hoving a vertice -> try to delete a Point
                 if (graph.markPointIndex != -1) {
-                    IO.out("Deleting : " + graph.markPointIndex);
+//                    IO.out("Deleting : " + graph.markPointIndex);
+                    graph.deletePoint(graph.markPointIndex);
+                    graph.markPointIndex = -1;
+                    String input = "";
+                    for (int i = 0; i < graph.points.size(); i++) {
+                        input += String.valueOf(graph.points.get(i).getX()) + " " + String.valueOf(graph.points.get(i).getY()) + "\n";
+                    }
+                    textInput.setText(input);
+                    canvas.draw();
                 } else {
+                    //Try to add a new Point
                     Point point = graph.getPoint(e.getX(), e.getY());
                     graph.addPoint(point);
                     textInput.setText(textInput.getText() + point.getX() + " " + point.getY() + "\n");

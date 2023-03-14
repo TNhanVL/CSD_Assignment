@@ -52,6 +52,11 @@ public class GraphManagement {
         points.add(p);
         convexPoints = Convex.ConvexHull(points);
     }
+    
+    public void deletePoint(int index){
+        points.remove(index);
+        convexPoints = Convex.ConvexHull(points);
+    }
 
     public void updatePoint(int index, Point p) {
         points.set(index, p);
