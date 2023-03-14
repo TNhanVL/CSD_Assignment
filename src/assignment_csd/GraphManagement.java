@@ -18,12 +18,16 @@ public class GraphManagement {
 
     public Color convexColor = Color.RED;
     public Color pointColor = Color.BLACK;
+    public Color coorAxisColor = Color.BLACK;
     public int pointRadius = 12;
     public int lineWeight = 8;
+    public int coorAxisWeight = 1;
+    public int coorAxisFontSize = 12;
     public int NumberOfRandomVertex = 10;
     public int maxRandomCoordinare = 100;
 
     public double paddingOfGraph = 0.1; //percent
+    public double gapBetweenLabel = 100;
     public boolean reCalZoom = false;
     public double zoom = 10;
     public double zoomInRatio = 1.2;
