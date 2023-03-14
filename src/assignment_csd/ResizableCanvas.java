@@ -101,10 +101,11 @@ public class ResizableCanvas extends Canvas {
             x /= 10;
             t *= 10;
         }
-        while (x < 1) {
-            x *= 10;
-            t /= 10;
-        }
+        //Uncomment if allow gap smaller than 1
+//        while (x < 1) {
+//            x *= 10;
+//            t /= 10;
+//        }
         double arr[] = {1, 2, 5, 10};
         double ans = 0, cl = 100;
         for (double i : arr) {
@@ -130,7 +131,6 @@ public class ResizableCanvas extends Canvas {
 //        drawPoint(getPoint(right), graph.pointRadius, gc, Color.BLUE);
 //        drawPoint(getPoint(top), graph.pointRadius, gc, Color.BLUE);
 //        drawPoint(getPoint(bottom), graph.pointRadius, gc, Color.BLUE);
-
         drawLine(getPoint(top), getPoint(bottom), gc, graph.coorAxisColor, graph.coorAxisWeight);
         drawLine(getPoint(left), getPoint(right), gc, graph.coorAxisColor, graph.coorAxisWeight);
 
