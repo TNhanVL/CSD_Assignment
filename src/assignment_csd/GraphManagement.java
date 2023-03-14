@@ -24,7 +24,7 @@ public class GraphManagement {
     public int maxRandomCoordinare = 100;
 
     public double paddingOfGraph = 0.1; //percent
-    public boolean reCalZoom = true;
+    public boolean reCalZoom = false;
     public double zoom = 10;
     public double zoomInRatio = 1.2;
     public double canvasWidth;
