@@ -24,6 +24,7 @@ public class Assignment_CSD extends Application {
 
     static Scene scene;
     static Stage graphStage;
+    static GraphManagement graph = new GraphManagement();
 
     @Override
     public void start(Stage stage) throws IOException {

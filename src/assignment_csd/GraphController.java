@@ -31,6 +31,7 @@ import javafx.stage.Stage;
 public class GraphController {
 
     ResizableCanvas canvas = new ResizableCanvas();
+    GraphManagement graph = Assignment_CSD.graph;
 
     @FXML
     private Pane paneCanvas;
@@ -63,7 +64,7 @@ public class GraphController {
                     IO.out("Deleting : " + GraphManagement.markPointIndex);
                 } else {
                     Point point = GraphManagement.getPoint(e.getX(), e.getY());
-                    Convex.addPoint(point);
+                    graph.addPoint(point);
                     textInput.setText(textInput.getText() + point.getX() + " " + point.getY() + "\n");
                     canvas.draw();
                 }
@@ -88,8 +89,7 @@ public class GraphController {
                     p.addY(y);
                     p.setY(GraphManagement.canvasHeight - p.getY());
                     Point p1 = GraphManagement.getPoint(p);
-                    Convex.points.set(GraphManagement.markPointIndex, p1);
-                    Convex.ConvexHull();
+                    graph.updatePoint(GraphManagement.markPointIndex, p1);
 
                     //show point in input textfield
                     String[] s = textInput.getText().split("\n");
@@ -184,7 +184,7 @@ public class GraphController {
     private void getTextInput(KeyEvent event) {
         try {
             ArrayList<Point> a = Point.converToPoints(textInput.getText().split("[\n]"));
-            Convex.Convex(a);
+            graph.setPoints(a);
 //            System.out.println(Convex.points);
             canvas.draw();
         } catch (Exception e) {
@@ -214,7 +214,7 @@ public class GraphController {
             input += String.valueOf(a.get(i).getX()) + " " + String.valueOf(a.get(i).getY()) + "\n";
         }
         textInput.setText(input);
-        Convex.Convex(a);
+        graph.setPoints(a);
         canvas.resetScreen();
     }
 

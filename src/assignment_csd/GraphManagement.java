@@ -4,6 +4,7 @@
  */
 package assignment_csd;
 
+import java.util.ArrayList;
 import javafx.scene.paint.Color;
 
 /**
@@ -11,6 +12,9 @@ import javafx.scene.paint.Color;
  * @author TTNhan
  */
 public class GraphManagement {
+
+    public ArrayList<Point> points = new ArrayList<>();
+    public ArrayList<Point> convexPoints = new ArrayList<>();
 
     public static Color convexColor = Color.RED;
     public static Color pointColor = Color.BLACK;
@@ -38,6 +42,21 @@ public class GraphManagement {
 
     public static int markPointIndex = -1;
     public static int selectedPointIndex = -1;
+
+    public void setPoints(ArrayList<Point> points) {
+        this.points = points;
+        convexPoints = Convex.ConvexHull(points);
+    }
+
+    public void addPoint(Point p) {
+        points.add(p);
+        convexPoints = Convex.ConvexHull(points);
+    }
+
+    public void updatePoint(int index, Point p) {
+        points.set(index, p);
+        convexPoints = Convex.ConvexHull(points);
+    }
 
     public static Point getPoint(double x, double y) {
         double u = (x - moveX - canvasWidth / 2) / zoom + middleX;
