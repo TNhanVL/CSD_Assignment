@@ -16,32 +16,32 @@ public class GraphManagement {
     public ArrayList<Point> points = new ArrayList<>();
     public ArrayList<Point> convexPoints = new ArrayList<>();
 
-    public static Color convexColor = Color.RED;
-    public static Color pointColor = Color.BLACK;
-    public static int pointRadius = 12;
-    public static int lineWeight = 8;
-    public static int NumberOfRandomVertex = 10;
-    public static int maxRandomCoordinare = 100;
+    public Color convexColor = Color.RED;
+    public Color pointColor = Color.BLACK;
+    public int pointRadius = 12;
+    public int lineWeight = 8;
+    public int NumberOfRandomVertex = 10;
+    public int maxRandomCoordinare = 100;
 
-    public static double paddingOfGraph = 0.1; //percent
-    public static boolean reCalZoom = true;
-    public static double zoom = 10;
-    public static double zoomInRatio = 1.2;
-    public static double canvasWidth;
-    public static double canvasHeight;
-    public static double middleX;
-    public static double middleY;
+    public double paddingOfGraph = 0.1; //percent
+    public boolean reCalZoom = true;
+    public double zoom = 10;
+    public double zoomInRatio = 1.2;
+    public double canvasWidth;
+    public double canvasHeight;
+    public double middleX;
+    public double middleY;
 
-    public static boolean clickToAddPoint = true;
+    public boolean clickToAddPoint = true;
 
-    public static double moveX = 0;
-    public static double moveY = 0;
-    public static double previousDragX = 0;
-    public static double previousDragY = 0;
-    public static boolean released = true;
+    public double moveX = 0;
+    public double moveY = 0;
+    public double previousDragX = 0;
+    public double previousDragY = 0;
+    public boolean released = true;
 
-    public static int markPointIndex = -1;
-    public static int selectedPointIndex = -1;
+    public int markPointIndex = -1;
+    public int selectedPointIndex = -1;
 
     public void setPoints(ArrayList<Point> points) {
         this.points = points;
@@ -58,13 +58,13 @@ public class GraphManagement {
         convexPoints = Convex.ConvexHull(points);
     }
 
-    public static Point getPoint(double x, double y) {
+    public Point getPoint(double x, double y) {
         double u = (x - moveX - canvasWidth / 2) / zoom + middleX;
         double v = (-y - moveY + canvasHeight / 2) / zoom + middleY;
         return new Point(u, v);
     }
 
-    public static Point getPoint(Point p) {
+    public Point getPoint(Point p) {
         double u = (p.getX() - moveX - canvasWidth / 2) / zoom + middleX;
         double v = (-p.getY() - moveY + canvasHeight / 2) / zoom + middleY;
         return new Point(u, v);

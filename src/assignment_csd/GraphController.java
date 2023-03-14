@@ -58,74 +58,74 @@ public class GraphController {
         //Click action
         canvas.setOnMouseClicked((MouseEvent e) -> {
             //Secondary mouse button
-            if (GraphManagement.clickToAddPoint && e.getButton() == MouseButton.SECONDARY) {
+            if (graph.clickToAddPoint && e.getButton() == MouseButton.SECONDARY) {
                 //If hoving a vertice
-                if (GraphManagement.markPointIndex != -1) {
-                    IO.out("Deleting : " + GraphManagement.markPointIndex);
+                if (graph.markPointIndex != -1) {
+                    IO.out("Deleting : " + graph.markPointIndex);
                 } else {
-                    Point point = GraphManagement.getPoint(e.getX(), e.getY());
+                    Point point = graph.getPoint(e.getX(), e.getY());
                     graph.addPoint(point);
                     textInput.setText(textInput.getText() + point.getX() + " " + point.getY() + "\n");
                     canvas.draw();
                 }
             }
             //Primary mouse button
-            if (GraphManagement.clickToAddPoint && e.getButton() == MouseButton.PRIMARY) {
+            if (graph.clickToAddPoint && e.getButton() == MouseButton.PRIMARY) {
 
             }
         });
 
         //move graph
         canvas.setOnMouseDragged((MouseEvent e) -> {
-            double x = e.getX() - GraphManagement.previousDragX;
-            double y = -(e.getY() - GraphManagement.previousDragY);
-            if (!GraphManagement.released) {
-                if (GraphManagement.markPointIndex == -1) {
-                    GraphManagement.moveX += x;
-                    GraphManagement.moveY += y;
+            double x = e.getX() - graph.previousDragX;
+            double y = -(e.getY() - graph.previousDragY);
+            if (!graph.released) {
+                if (graph.markPointIndex == -1) {
+                    graph.moveX += x;
+                    graph.moveY += y;
                 } else {
-                    Point p = ResizableCanvas.points.get(GraphManagement.markPointIndex);
+                    Point p = ResizableCanvas.points.get(graph.markPointIndex);
                     p.addX(x);
                     p.addY(y);
-                    p.setY(GraphManagement.canvasHeight - p.getY());
-                    Point p1 = GraphManagement.getPoint(p);
-                    graph.updatePoint(GraphManagement.markPointIndex, p1);
+                    p.setY(graph.canvasHeight - p.getY());
+                    Point p1 = graph.getPoint(p);
+                    graph.updatePoint(graph.markPointIndex, p1);
 
                     //show point in input textfield
                     String[] s = textInput.getText().split("\n");
-                    s[GraphManagement.markPointIndex] = p1.getX() + " " + p1.getY();
+                    s[graph.markPointIndex] = p1.getX() + " " + p1.getY();
                     textInput.setText(String.join("\n", s) + "\n");
                 }
             }
-            GraphManagement.previousDragX = e.getX();
-            GraphManagement.previousDragY = e.getY();
-            GraphManagement.released = false;
-            GraphManagement.reCalZoom = false;
+            graph.previousDragX = e.getX();
+            graph.previousDragY = e.getY();
+            graph.released = false;
+            graph.reCalZoom = false;
             canvas.draw();
         });
 
         //mark released mouse
         canvas.setOnMouseReleased((MouseEvent e) -> {
-            GraphManagement.released = true;
+            graph.released = true;
         });
 
         //Mark hover vertice
         canvas.setOnMouseMoved((MouseEvent e) -> {
             double x = e.getX();
-            double y = GraphManagement.canvasHeight - e.getY();
+            double y = graph.canvasHeight - e.getY();
 //            System.out.println(x + " " + y);
 //            System.out.println(ResizableCanvas.points);
-            int preIndex = GraphManagement.markPointIndex;
-            GraphManagement.markPointIndex = -1;
+            int preIndex = graph.markPointIndex;
+            graph.markPointIndex = -1;
             int index = 0;
             for (Point point : ResizableCanvas.points) {
-                if (point.distance(new Point(x, y)) <= GraphManagement.pointRadius) {
-                    GraphManagement.markPointIndex = index;
+                if (point.distance(new Point(x, y)) <= graph.pointRadius) {
+                    graph.markPointIndex = index;
                     break;
                 }
                 index++;
             }
-            if (preIndex != GraphManagement.markPointIndex) {
+            if (preIndex != graph.markPointIndex) {
                 canvas.draw();
             }
 //            System.out.println(e);
@@ -134,25 +134,25 @@ public class GraphController {
         //Mouse scroll
         canvas.setOnScroll((ScrollEvent e) -> {
             double t = e.getDeltaY();
-            double x = e.getX() - GraphManagement.canvasWidth / 2;
-            double y = e.getY() - GraphManagement.canvasHeight / 2;
-            GraphManagement.reCalZoom = false;
+            double x = e.getX() - graph.canvasWidth / 2;
+            double y = e.getY() - graph.canvasHeight / 2;
+            graph.reCalZoom = false;
             if (t < 0) {
-                GraphManagement.zoom = GraphManagement.zoom * (1 / GraphManagement.zoomInRatio);
-                GraphManagement.moveX -= x;
-                GraphManagement.moveX = GraphManagement.moveX * (1 / GraphManagement.zoomInRatio);
-                GraphManagement.moveX += x;
-                GraphManagement.moveY += y;
-                GraphManagement.moveY = GraphManagement.moveY * (1 / GraphManagement.zoomInRatio);
-                GraphManagement.moveY -= y;
+                graph.zoom = graph.zoom * (1 / graph.zoomInRatio);
+                graph.moveX -= x;
+                graph.moveX = graph.moveX * (1 / graph.zoomInRatio);
+                graph.moveX += x;
+                graph.moveY += y;
+                graph.moveY = graph.moveY * (1 / graph.zoomInRatio);
+                graph.moveY -= y;
             } else {
-                GraphManagement.zoom = GraphManagement.zoom * GraphManagement.zoomInRatio;
-                GraphManagement.moveX -= x;
-                GraphManagement.moveX = GraphManagement.moveX * GraphManagement.zoomInRatio;
-                GraphManagement.moveX += x;
-                GraphManagement.moveY += y;
-                GraphManagement.moveY = GraphManagement.moveY * GraphManagement.zoomInRatio;
-                GraphManagement.moveY -= y;
+                graph.zoom = graph.zoom * graph.zoomInRatio;
+                graph.moveX -= x;
+                graph.moveX = graph.moveX * graph.zoomInRatio;
+                graph.moveX += x;
+                graph.moveY += y;
+                graph.moveY = graph.moveY * graph.zoomInRatio;
+                graph.moveY -= y;
             }
             canvas.draw();
         });
@@ -160,23 +160,23 @@ public class GraphController {
 
     public void initialize() {
         initialCanvas();
-        colorPickerConvex.setValue(GraphManagement.convexColor);
-        colorPickerPoint.setValue(GraphManagement.pointColor);
+        colorPickerConvex.setValue(graph.convexColor);
+        colorPickerPoint.setValue(graph.pointColor);
         slider.setMin(2);
         slider.setMax(1000);
-        slider.setValue(GraphManagement.NumberOfRandomVertex);
-        textFieldNNumberOfVertex.setText(String.valueOf(GraphManagement.NumberOfRandomVertex));
+        slider.setValue(graph.NumberOfRandomVertex);
+        textFieldNNumberOfVertex.setText(String.valueOf(graph.NumberOfRandomVertex));
     }
 
     @FXML
     private void pickConvexColor(ActionEvent event) {
-        GraphManagement.convexColor = colorPickerConvex.getValue();
+        graph.convexColor = colorPickerConvex.getValue();
         canvas.draw();
     }
 
     @FXML
     private void pickPointColor(ActionEvent event) {
-        GraphManagement.pointColor = colorPickerPoint.getValue();
+        graph.pointColor = colorPickerPoint.getValue();
         canvas.draw();
     }
 
@@ -193,16 +193,16 @@ public class GraphController {
 
     @FXML
     private void sliderNumberOfVertex(MouseEvent event) {
-        GraphManagement.NumberOfRandomVertex = (int) Math.round(slider.getValue());
-        textFieldNNumberOfVertex.setText(String.valueOf(GraphManagement.NumberOfRandomVertex));
+        graph.NumberOfRandomVertex = (int) Math.round(slider.getValue());
+        textFieldNNumberOfVertex.setText(String.valueOf(graph.NumberOfRandomVertex));
     }
 
     @FXML
     private void randomButton(ActionEvent event) {
         Random rand = new Random();
         Set<Point> s = new HashSet<>();
-        int maxValue = GraphManagement.maxRandomCoordinare * GraphManagement.NumberOfRandomVertex;
-        while (s.size() < GraphManagement.NumberOfRandomVertex) {
+        int maxValue = graph.maxRandomCoordinare * graph.NumberOfRandomVertex;
+        while (s.size() < graph.NumberOfRandomVertex) {
             int u = rand.nextInt(maxValue);
             int v = rand.nextInt(maxValue);
             s.add(new Point(u, v));
@@ -220,8 +220,8 @@ public class GraphController {
 
     @FXML
     private void textFieldNNumberOfVertex(KeyEvent event) {
-        GraphManagement.NumberOfRandomVertex = Integer.parseInt(textFieldNNumberOfVertex.getText());
-        slider.setValue(Double.valueOf(GraphManagement.NumberOfRandomVertex));
+        graph.NumberOfRandomVertex = Integer.parseInt(textFieldNNumberOfVertex.getText());
+        slider.setValue(Double.valueOf(graph.NumberOfRandomVertex));
     }
 
     @FXML
