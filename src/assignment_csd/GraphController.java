@@ -30,7 +30,7 @@ import javafx.stage.Stage;
  */
 public class GraphController {
 
-    ResizableCanvas canvas1 = new ResizableCanvas();
+    ResizableCanvas canvas = new ResizableCanvas();
 
     @FXML
     private Pane paneCanvas;
@@ -48,29 +48,34 @@ public class GraphController {
     //gesture on canvas
     public void initialCanvas() {
 
-        paneCanvas.getChildren().add(canvas1);
-        canvas1.widthProperty().bind(paneCanvas.widthProperty().subtract(2));
-        canvas1.heightProperty().bind(paneCanvas.heightProperty().subtract(2));
-        canvas1.setTranslateX(1);
-        canvas1.setTranslateY(1);
+        paneCanvas.getChildren().add(canvas);
+        canvas.widthProperty().bind(paneCanvas.widthProperty().subtract(2));
+        canvas.heightProperty().bind(paneCanvas.heightProperty().subtract(2));
+        canvas.setTranslateX(1);
+        canvas.setTranslateY(1);
 
         //Click action
-        canvas1.setOnMouseClicked((MouseEvent e) -> {
+        canvas.setOnMouseClicked((MouseEvent e) -> {
             //Secondary mouse button
             if (GraphManagement.clickToAddPoint && e.getButton() == MouseButton.SECONDARY) {
-                Point point = GraphManagement.getPoint(e.getX(), e.getY());
-                Convex.addPoint(point);
-                textInput.setText(textInput.getText() + point.getX() + " " + point.getY() + "\n");
-                canvas1.draw();
+                //If hoving a vertice
+                if (GraphManagement.markPointIndex != -1) {
+                    IO.out("Deleting : " + GraphManagement.markPointIndex);
+                } else {
+                    Point point = GraphManagement.getPoint(e.getX(), e.getY());
+                    Convex.addPoint(point);
+                    textInput.setText(textInput.getText() + point.getX() + " " + point.getY() + "\n");
+                    canvas.draw();
+                }
             }
             //Primary mouse button
             if (GraphManagement.clickToAddPoint && e.getButton() == MouseButton.PRIMARY) {
-                
+
             }
         });
 
         //move graph
-        canvas1.setOnMouseDragged((MouseEvent e) -> {
+        canvas.setOnMouseDragged((MouseEvent e) -> {
             double x = e.getX() - GraphManagement.previousDragX;
             double y = -(e.getY() - GraphManagement.previousDragY);
             if (!GraphManagement.released) {
@@ -96,15 +101,16 @@ public class GraphController {
             GraphManagement.previousDragY = e.getY();
             GraphManagement.released = false;
             GraphManagement.reCalZoom = false;
-            canvas1.draw();
+            canvas.draw();
         });
 
         //mark released mouse
-        canvas1.setOnMouseReleased((MouseEvent e) -> {
+        canvas.setOnMouseReleased((MouseEvent e) -> {
             GraphManagement.released = true;
         });
 
-        canvas1.setOnMouseMoved((MouseEvent e) -> {
+        //Mark hover vertice
+        canvas.setOnMouseMoved((MouseEvent e) -> {
             double x = e.getX();
             double y = GraphManagement.canvasHeight - e.getY();
 //            System.out.println(x + " " + y);
@@ -120,13 +126,13 @@ public class GraphController {
                 index++;
             }
             if (preIndex != GraphManagement.markPointIndex) {
-                canvas1.draw();
+                canvas.draw();
             }
 //            System.out.println(e);
         });
 
-        //Moust scroll
-        canvas1.setOnScroll((ScrollEvent e) -> {
+        //Mouse scroll
+        canvas.setOnScroll((ScrollEvent e) -> {
             double t = e.getDeltaY();
             double x = e.getX() - GraphManagement.canvasWidth / 2;
             double y = e.getY() - GraphManagement.canvasHeight / 2;
@@ -148,7 +154,7 @@ public class GraphController {
                 GraphManagement.moveY = GraphManagement.moveY * GraphManagement.zoomInRatio;
                 GraphManagement.moveY -= y;
             }
-            canvas1.draw();
+            canvas.draw();
         });
     }
 
@@ -165,13 +171,13 @@ public class GraphController {
     @FXML
     private void pickConvexColor(ActionEvent event) {
         GraphManagement.convexColor = colorPickerConvex.getValue();
-        canvas1.draw();
+        canvas.draw();
     }
 
     @FXML
     private void pickPointColor(ActionEvent event) {
         GraphManagement.pointColor = colorPickerPoint.getValue();
-        canvas1.draw();
+        canvas.draw();
     }
 
     @FXML
@@ -180,7 +186,7 @@ public class GraphController {
             ArrayList<Point> a = Point.converToPoints(textInput.getText().split("[\n]"));
             Convex.Convex(a);
 //            System.out.println(Convex.points);
-            canvas1.draw();
+            canvas.draw();
         } catch (Exception e) {
         }
     }
@@ -209,7 +215,7 @@ public class GraphController {
         }
         textInput.setText(input);
         Convex.Convex(a);
-        canvas1.resetScreen();
+        canvas.resetScreen();
     }
 
     @FXML
@@ -220,7 +226,7 @@ public class GraphController {
 
     @FXML
     private void resetScreen(ActionEvent event) {
-        canvas1.resetScreen();
+        canvas.resetScreen();
     }
 
     @FXML
