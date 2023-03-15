@@ -4,6 +4,7 @@
  */
 package assignment_csd;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -12,6 +13,9 @@ import java.util.Set;
 import javafx.animation.AnimationTimer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextArea;
@@ -252,6 +256,20 @@ public class GraphController {
         Assignment_CSD.graphStage.hide();
 
         game.start(stage);
+    }
+
+    @FXML
+    private void about(ActionEvent event) throws IOException {
+        Stage stage = new Stage();
+        Parent root = FXMLLoader.load(getClass().getResource("Help.fxml"));
+
+        Scene scene = new Scene(root);
+
+        stage.setScene(scene);
+        stage.setTitle("Help");
+        stage.setWidth(1200);
+        stage.setHeight(900);
+        stage.show();
     }
 
 }
