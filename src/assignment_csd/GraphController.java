@@ -175,7 +175,6 @@ public class GraphController {
     }
 
     public void initialize() {
-        //dm
         initialCanvas();
         colorPickerConvex.setValue(graph.convexColor);
         colorPickerPoint.setValue(graph.pointColor);

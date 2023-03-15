@@ -132,15 +132,23 @@ public class Point {
         return Math.abs(this.y - other.y) < 1e-6;
     }
 
+    public static Point convertToPoint(String s) {
+        try {
+            String[] t = s.split(" ");
+            double u = Double.parseDouble(t[0]);
+            double v = Double.parseDouble(t[1]);
+            return new Point(u, v);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
     public static ArrayList<Point> converToPoints(String[] s) {
         ArrayList<Point> a = new ArrayList<>();
         for (String item : s) {
-            try {
-                String[] t = item.split(" ");
-                double u = Double.parseDouble(t[0]);
-                double v = Double.parseDouble(t[1]);
-                a.add(new Point(u, v));
-            } catch (NumberFormatException e) {
+            Point p = convertToPoint(item);
+            if (p != null) {
+                a.add(p);
             }
         }
         return a;

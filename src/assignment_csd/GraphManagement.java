@@ -85,9 +85,7 @@ public class GraphManagement {
     }
 
     public Point getPoint(double x, double y) {
-        double u = (x - moveX - canvasWidth / 2) / zoom + middleX;
-        double v = (-y - moveY + canvasHeight / 2) / zoom + middleY;
-        return new Point(u, v);
+        return getPoint(new Point(x, y));
     }
 
     public Point getPoint(Point p) {
