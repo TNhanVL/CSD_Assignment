@@ -30,19 +30,8 @@ public class HelpController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         WebEngine webEngine = webView.getEngine();
-        webEngine.load("https://thanhduong1311.github.io/AssignmentCSD_About/");
         webEngine.setJavaScriptEnabled(true);
-        
-        IO.out(webEngine.getDocument());
-        
-    }
-
-    @FXML
-    private void close(ActionEvent event) {
-        IO.out(webView.getEngine().getDocument());
-//        Node source = (Node) event.getSource();
-//        Stage stage = (Stage) source.getScene().getWindow();
-//        stage.close();
+        webEngine.load("https://thanhduong1311.github.io/AssignmentCSD_About/");
     }
 
 }

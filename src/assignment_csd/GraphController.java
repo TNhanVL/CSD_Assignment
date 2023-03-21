@@ -272,4 +272,16 @@ public class GraphController {
         stage.show();
     }
 
+    @FXML
+    private void exit(ActionEvent event) {
+        Assignment_CSD.graphStage.close();
+    }
+
+    @FXML
+    private void clear(ActionEvent event) {
+        graph.points.clear();
+        graph.convexPoints.clear();
+        canvas.draw();
+    }
+
 }
