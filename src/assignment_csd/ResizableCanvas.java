@@ -247,6 +247,7 @@ public class ResizableCanvas extends Canvas {
         gc.setLineWidth(1);
         gc.setStroke(Color.BLACK);
         gc.strokeText("Convex Polygon Area: " + Math.round(graph.calConvexArea() * 1000) / 1000.0, 10, 10);
+        gc.strokeText("Number of points: " + graph.points.size(), 10, 30);
     }
 
     void resetScreen() {
