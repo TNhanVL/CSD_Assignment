@@ -35,8 +35,9 @@ import javafx.util.Pair;
 public class GameManagement extends Application {
 
     double orgSceneX, orgSceneY;
-    static double friction = -400;
-    static double ballRadius = 30;
+    static double friction = -200;
+    static double ballRadius = 20;
+    static double initSpeed = 1000;
     double defaultWidth = 1000;
     double defaultHeight = 600;
     Stage graphStage;
@@ -65,13 +66,32 @@ public class GameManagement extends Application {
         for (Point point : convexPoints) {
             set.add(point);
         }
+
+        //Set line
         for (int i = 0; i < convexPoints.size(); i++) {
-            lines.add(new Line(convexPoints.get(i).getX(), this.defaultHeight - convexPoints.get(i).getY(), convexPoints.get((i + 1) % convexPoints.size()).getX(), this.defaultHeight - convexPoints.get((i + 1) % convexPoints.size()).getY()));
+            double Ax = convexPoints.get(i).getX();
+            double Ay = this.defaultHeight - convexPoints.get(i).getY();
+            double Bx = convexPoints.get((i + 1) % convexPoints.size()).getX();
+            double By = this.defaultHeight - convexPoints.get((i + 1) % convexPoints.size()).getY();
+//            lines.add(new Line(Ax, Ay, Bx, By));
+
+            Point A = new Point(Ax, Ay);
+            Point B = new Point(Bx, By);
+
+            Point AB = B.sub(A).unit().mul(15).rotate();
+            A = A.add(AB);
+            B = B.add(AB);
+            lines.add(new Line(A.getX(), A.getY(), B.getX(), B.getY()));
+            AB = B.sub(A).unit().mul(14).rotate();
+            A = A.add(AB);
+            B = B.add(AB);
+            lines.add(new Line(A.getX(), A.getY(), B.getX(), B.getY()));
         }
+
         ArrayList<Point> insidePoints = new ArrayList<>();
         for (Point p : points) {
             if (set.contains(p)) {
-                holes.add(new Hole(p.getX(), this.defaultHeight - p.getY(), 40, Color.AQUA));
+                holes.add(new Hole(p.getX(), this.defaultHeight - p.getY(), 30, Color.AQUA));
             } else {
                 insidePoints.add(p);
             }
@@ -495,7 +515,7 @@ public class GameManagement extends Application {
 
         scene.setOnMouseClicked((MouseEvent e) -> {
             Point p = new Point(e.getX(), e.getY());
-            p = p.sub(balls.get(0).toPoint()).unit().mul(1500);
+            p = p.sub(balls.get(0).toPoint()).unit().mul(initSpeed);
             balls.get(0).v = p;
         });
 

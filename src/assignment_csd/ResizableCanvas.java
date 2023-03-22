@@ -42,7 +42,7 @@ public class ResizableCanvas extends Canvas {
     }
 
     //Example padding: 10%
-    private void calToFitScreen() {
+    void calToFitScreen() {
         double minX = Double.POSITIVE_INFINITY;
         double maxX = Double.NEGATIVE_INFINITY;
         double minY = Double.POSITIVE_INFINITY;
