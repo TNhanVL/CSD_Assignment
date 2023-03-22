@@ -255,6 +255,8 @@ public class GraphController {
         Stage stage = new Stage();
         Assignment_CSD.graphStage.hide();
 
+        game.setSize(canvas.getWidth(), canvas.getHeight());
+        game.setBall(canvas.getPoint(graph.points));
         game.start(stage);
     }
 

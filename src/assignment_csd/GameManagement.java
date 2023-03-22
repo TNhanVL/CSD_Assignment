@@ -6,9 +6,11 @@ package assignment_csd;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.animation.AnimationTimer;
@@ -35,6 +37,8 @@ public class GameManagement extends Application {
     double orgSceneX, orgSceneY;
     static double friction = -400;
     static double ballRadius = 30;
+    double defaultWidth = 1000;
+    double defaultHeight = 600;
     Stage graphStage;
 
     boolean debug = false;
@@ -48,6 +52,34 @@ public class GameManagement extends Application {
 
     public GameManagement(Stage graphStage) {
         this.graphStage = graphStage;
+    }
+
+    public void setSize(double w, double h) {
+        this.defaultWidth = w;
+        this.defaultHeight = h;
+    }
+
+    public void setBall(ArrayList<Point> points) {
+        ArrayList<Point> convexPoints = Convex.ConvexHull(points);
+        Set<Point> set = new HashSet<Point>();
+        for (Point point : convexPoints) {
+            set.add(point);
+        }
+        for (int i = 0; i < convexPoints.size(); i++) {
+            lines.add(new Line(convexPoints.get(i).getX(), this.defaultHeight - convexPoints.get(i).getY(), convexPoints.get((i + 1) % convexPoints.size()).getX(), this.defaultHeight - convexPoints.get((i + 1) % convexPoints.size()).getY()));
+        }
+        ArrayList<Point> insidePoints = new ArrayList<>();
+        for (Point p : points) {
+            if (set.contains(p)) {
+                holes.add(new Hole(p.getX(), this.defaultHeight - p.getY(), 40, Color.AQUA));
+            } else {
+                insidePoints.add(p);
+            }
+        }
+        balls.add(new Ball(insidePoints.get(0).getX(), this.defaultHeight - insidePoints.get(0).getY(), ballRadius, Color.BLACK, System.nanoTime()));
+        for (int i = 1; i < insidePoints.size(); i++) {
+            balls.add(new Ball(insidePoints.get(i).getX(), this.defaultHeight - insidePoints.get(i).getY(), ballRadius, Color.RED, System.nanoTime()));
+        }
     }
 
     public double distance(Point p, Line l) {
@@ -404,9 +436,10 @@ public class GameManagement extends Application {
     @Override
     public void start(Stage primaryStage) {
         Group root = new Group();
-        Scene scene = new Scene(root, 1000, 600);
+        Scene scene = new Scene(root, defaultWidth, defaultHeight);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Magic");
+        primaryStage.setResizable(false);
         primaryStage.show();
 
         primaryStage.setOnCloseRequest(e -> {
@@ -417,38 +450,44 @@ public class GameManagement extends Application {
 
         long now = System.nanoTime();
 
-        balls.add(new Ball(90, 90, ballRadius, Color.BLACK, now));
-        balls.get(0).v = new Point(0.12289017114034095, -1.5893042145205207);
+        if (balls.isEmpty()) {
+            balls.add(new Ball(90, 90, ballRadius, Color.BLACK, now));
+//        balls.get(0).v = new Point(0.12289017114034095, -1.5893042145205207);
 
 //        IO.out(balls.get(0).toPoint().distance(balls.get(1).toPoint()));
 //        IO.out(timeToIntersect(balls.get(0), balls.get(1)));
 //        IO.out(checkIntersect(balls.get(0), balls.get(1), (long) now + 16666666));
-        for (int i = 1; i <= 8; i++) {
-            Ball a = new Ball(41 + i * 61, 550 - i * 61, ballRadius, Color.RED, System.nanoTime());
+            for (int i = 1; i <= 8; i++) {
+                Ball a = new Ball(41 + i * 61, 550 - i * 61, ballRadius, Color.RED, System.nanoTime());
 //            a.v = new Point(i * 200, i * 200);
-            balls.add(a);
+                balls.add(a);
+            }
         }
 
         for (Ball ball : balls) {
             root.getChildren().add(ball);
         }
 
-        lines.add(new Line(10, 10, scene.getWidth() - 10, 10));
-        lines.add(new Line(10, 10, 10, scene.getHeight() - 10));
-        lines.add(new Line(scene.getWidth() - 10, 10, scene.getWidth() - 10, scene.getHeight() - 10));
-        lines.add(new Line(10, scene.getHeight() - 10, scene.getWidth() - 10, scene.getHeight() - 10));
+        if (lines.isEmpty()) {
+            lines.add(new Line(10, 10, scene.getWidth() - 10, 10));
+            lines.add(new Line(10, 10, 10, scene.getHeight() - 10));
+            lines.add(new Line(scene.getWidth() - 10, 10, scene.getWidth() - 10, scene.getHeight() - 10));
+            lines.add(new Line(10, scene.getHeight() - 10, scene.getWidth() - 10, scene.getHeight() - 10));
+        }
 
         for (Line line : lines) {
             root.getChildren().add(line);
         }
 
-        double padding = 20;
-        holes.add(new Hole(padding, padding, 40, Color.AQUA));
-        holes.add(new Hole(scene.getWidth() - padding, padding, 40, Color.AQUA));
-        holes.add(new Hole(padding, scene.getHeight() - padding, 40, Color.AQUA));
-        holes.add(new Hole(scene.getWidth() - padding, scene.getHeight() - padding, 40, Color.AQUA));
-        holes.add(new Hole(scene.getWidth() / 2, padding, 40, Color.AQUA));
-        holes.add(new Hole(scene.getWidth() / 2, scene.getHeight() - padding, 40, Color.AQUA));
+        if (holes.isEmpty()) {
+            double padding = 20;
+            holes.add(new Hole(padding, padding, 40, Color.AQUA));
+            holes.add(new Hole(scene.getWidth() - padding, padding, 40, Color.AQUA));
+            holes.add(new Hole(padding, scene.getHeight() - padding, 40, Color.AQUA));
+            holes.add(new Hole(scene.getWidth() - padding, scene.getHeight() - padding, 40, Color.AQUA));
+            holes.add(new Hole(scene.getWidth() / 2, padding, 40, Color.AQUA));
+            holes.add(new Hole(scene.getWidth() / 2, scene.getHeight() - padding, 40, Color.AQUA));
+        }
 
         for (Hole hole : holes) {
             root.getChildren().add(hole);
@@ -459,7 +498,6 @@ public class GameManagement extends Application {
             p = p.sub(balls.get(0).toPoint()).unit().mul(1500);
             balls.get(0).v = p;
         });
-        
 
         startGameTimer();
     }
