@@ -33,7 +33,7 @@
                      </accelerator></MenuItem>
                   <MenuItem mnemonicParsing="false" onAction="#saveAsPicture" text="Save As Picture" />
                   <MenuItem fx:id="closeFile" disable="true" mnemonicParsing="false" onAction="#closeFile" text="Close file" />
-                  <MenuItem mnemonicParsing="false" onAction="#clear" text="Clear" />
+                  <MenuItem mnemonicParsing="false" onAction="#clearGraph" text="Clear" />
                   <MenuItem mnemonicParsing="false" onAction="#exit" text="Exit">
                      <accelerator>
                         <KeyCodeCombination alt="DOWN" code="F4" control="UP" meta="UP" shift="UP" shortcut="UP" />

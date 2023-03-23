@@ -266,7 +266,9 @@ public class GraphController {
         Assignment_CSD.graphStage.hide();
 
         game.setSize(canvas.getWidth(), canvas.getHeight());
-        game.setBall(canvas.getPoint(graph.points));
+        if (!graph.points.isEmpty()) {
+            game.setBall(canvas.getPoint(graph.points));
+        }
         game.start(stage);
     }
 
@@ -290,7 +292,7 @@ public class GraphController {
     }
 
     @FXML
-    void clear() {
+    void clearGraph() {
         graph.points.clear();
         graph.convexPoints.clear();
         canvas.draw();
@@ -298,7 +300,7 @@ public class GraphController {
     }
 
     private void clear(ActionEvent event) {
-        clear();
+        clearGraph();
     }
 
     void saveToFile(File file) {
@@ -351,7 +353,7 @@ public class GraphController {
     private void closeFile(ActionEvent event) {
         if (saveFile != null) {
             saveFile = null;
-            clear();
+            clearGraph();
             closeFile.setDisable(true);
         }
     }
