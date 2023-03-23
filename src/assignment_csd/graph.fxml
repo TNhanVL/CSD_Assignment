@@ -31,6 +31,7 @@
                      <accelerator>
                         <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="DOWN" shortcut="UP" />
                      </accelerator></MenuItem>
+                  <MenuItem mnemonicParsing="false" onAction="#saveAsPicture" text="Save As Picture" />
                   <MenuItem fx:id="closeFile" disable="true" mnemonicParsing="false" onAction="#closeFile" text="Close file" />
                   <MenuItem mnemonicParsing="false" onAction="#clear" text="Clear" />
                   <MenuItem mnemonicParsing="false" onAction="#exit" text="Exit">
